@@ -34,6 +34,10 @@ package object pircbotx {
       builder.addListeners(listeners.asJava)
     }
 
+    def setFinger(fingerString: Option[String]) : Configuration.Builder = {
+      fingerString.map(builder.setFinger).getOrElse(builder)
+    }
+
   }
 
 }

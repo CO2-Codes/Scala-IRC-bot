@@ -9,7 +9,7 @@ case class BotConfiguration(
                           nickname: String,
                           nickservPassword: Option[String],
                           channels: Seq[String],
-                          fingerMsg: String,
+                          fingerMsg: Option[String],
                           botAdmins: Seq[String],
                           listeners: Seq[String],
                           helpText: String,
