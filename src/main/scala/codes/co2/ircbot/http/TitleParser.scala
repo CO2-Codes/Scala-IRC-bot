@@ -22,6 +22,7 @@ object TitleParser {
       .replaceAll("\r", " ")
       .replaceAll("\t", " ")
       .replaceAll("\b", " ")
+      .replaceAll("\\p{C}", "?") // Strip control codes; https://stackoverflow.com/a/6199346
   }
 
 }
