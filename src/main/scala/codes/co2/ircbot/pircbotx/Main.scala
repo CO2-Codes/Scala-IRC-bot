@@ -38,7 +38,7 @@ object Main extends App {
       .setLogin(config.nickname)
       .setName(config.nickname)
       .setRealName(config.realname.getOrElse(config.nickname))
-      .setNickservPassword(config.nickservPassword.orNull).setNickservDelayJoin(true)
+      .setNickservPassword(config.nickservPassword.orNull).setNickservDelayJoin(config.nickservPassword.nonEmpty)
       .setAutoNickChange(true)
       .addListeners(config)
       .buildConfiguration()

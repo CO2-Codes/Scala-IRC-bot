@@ -25,6 +25,7 @@ class AdminListener(botAdmins: Seq[String], helpText: String) extends ListenerAd
 
   override def onMessage(event: MessageEvent): Unit = {
     event.getMessage match {
+      case string if string.equalsIgnoreCase("botsnack") => event.getChannel.send().message(":D")
       case "!help" => event.getChannel.send().message(helpText)
       case "!quit" if botAdmins.contains(event.getUser.getNick) && event.getUser.isVerified =>
         shutdown(getBot(event))
