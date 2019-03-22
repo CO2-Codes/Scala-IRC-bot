@@ -7,6 +7,7 @@ import pureconfig.generic.auto._ // IntelliJ might see this as an unused import.
 case class BotConfiguration(
                           connection: Connection,
                           nickname: String,
+                          realname: Option[String],
                           nickservPassword: Option[String],
                           channels: Seq[String],
                           fingerMsg: Option[String],

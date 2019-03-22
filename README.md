@@ -14,6 +14,7 @@ bot-configuration {
   }
 
   nickname = "Bot nickname"
+  realname = "realname" // Optional, defaults to nickname
   nickserv-password = "Bot's nickserv pass" // Optional
   channels = ["#array", "#of", "#channels"]
   finger-msg = "Some message" // Optional

@@ -37,6 +37,7 @@ object Main extends App {
       .setFinger(config.fingerMsg)
       .setLogin(config.nickname)
       .setName(config.nickname)
+      .setRealName(config.realname.getOrElse(config.nickname))
       .setNickservPassword(config.nickservPassword.orNull).setNickservDelayJoin(true)
       .setAutoNickChange(true)
       .addListeners(config)
