@@ -24,7 +24,9 @@ bot-configuration {
 }
 ```
 
-Use `sbt assembly` to create a .jar. Then run the bot with `java -jar <filename.jar> <configfile>`.
+Use `sbt assembly` to create a .jar. Then run the bot with `java -jar <filename.jar> <path/to/configfile>`.
+
+To run the bot without making a jar, use `sbt "run <path/to/configfile>"`
 
 In the configuration file, the array of `bot-admins` is used to decide who is allowed to run admin-only commands (currently
  only !quit in the adminListener). The `listeners` array is the most important. This decides which functionality your
