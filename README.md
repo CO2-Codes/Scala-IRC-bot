@@ -3,27 +3,7 @@
 This is a Scala implementation of an IRC bot, on top of https://github.com/pircbotx/pircbotx.
 
 ## How to install
-First, make a configuration file, of this format:
-
-```
-bot-configuration {
-  connection {
-    server-name = "irc.someserver.com"
-    port = 6697
-    ssl = true
-  }
-
-  nickname = "Bot nickname"
-  realname = "realname" // Optional, defaults to nickname
-  nickserv-password = "Bot's nickserv pass" // Optional
-  channels = ["#array", "#of", "#channels"]
-  finger-msg = "Some message" // Optional
-  bot-admins = ["Array", "of", "nicknames"]
-  listeners = ["adminListener", "linkListener"]
-  help-text = "Some help text"
-
-}
-```
+First, make a configuration file, based on [the example](example.conf).
 
 Use `sbt assembly` to create a .jar. Then run the bot with `java -jar <filename.jar> <path/to/configfile>`.
 

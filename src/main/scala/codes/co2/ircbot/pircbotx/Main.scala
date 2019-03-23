@@ -40,7 +40,7 @@ object Main extends App {
       .setRealName(config.realname.getOrElse(config.nickname))
       .setNickservPassword(config.nickservPassword.orNull).setNickservDelayJoin(config.nickservPassword.nonEmpty)
       .setAutoNickChange(true)
-      .addListeners(config)
+      .addListeners(config, path)
       .buildConfiguration()
   }
 

@@ -1,5 +1,8 @@
 package codes.co2.ircbot.http
 
+import org.apache.commons.text.StringEscapeUtils
+
+
 object TitleParser {
 
   def findTitle(page: String): Option[String] = {
@@ -8,7 +11,7 @@ object TitleParser {
     val endTagIdx = lowerCase.indexOf("</title>")
 
     if (startTagIdx >= 0 && endTagIdx > startTagIdx) {
-      Some(stripSpecialChars(page.substring(startTagIdx + 7, endTagIdx)))
+      Some(page.substring(startTagIdx + 7, endTagIdx)).map(StringEscapeUtils.unescapeHtml4).map(stripSpecialChars)
     } else None
 
   }

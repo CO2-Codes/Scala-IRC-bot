@@ -20,4 +20,12 @@ class TitleParserSpec extends FlatSpec with Matchers {
 
   }
 
+  "findTitle" should "strip newlines and so on" in {
+    TitleParser.findTitle("<title>a\nb\rc\td\be</title>") should be(Some("a b c d e"))
+  }
+
+  "findTitle" should "unescape html special chars" in {
+    TitleParser.findTitle("<title>&quot; &gt; &euro;</title>") should be(Some("\" > €"))
+  }
+
 }

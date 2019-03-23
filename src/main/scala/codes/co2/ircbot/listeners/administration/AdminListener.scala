@@ -1,10 +1,11 @@
 package codes.co2.ircbot.listeners.administration
 
+import codes.co2.ircbot.config.AdminListenerConfig
 import org.pircbotx.PircBotX
 import org.pircbotx.hooks.events.{ConnectEvent, MessageEvent, PrivateMessageEvent}
 import org.pircbotx.hooks.{Event, ListenerAdapter}
 
-class AdminListener(botAdmins: Seq[String], helpText: String) extends ListenerAdapter {
+class AdminListener(config: AdminListenerConfig) extends ListenerAdapter {
 
   // Scala doesn't seem to like Java's Generics very much...
   private def getBot(event: Event): PircBotX = {
@@ -18,7 +19,7 @@ class AdminListener(botAdmins: Seq[String], helpText: String) extends ListenerAd
 
   override def onPrivateMessage(event: PrivateMessageEvent): Unit = {
     event.getMessage match {
-      case "!quit" if botAdmins.contains(event.getUser.getNick) && event.getUser.isVerified =>
+      case "!quit" if config.botAdmins.contains(event.getUser.getNick) && event.getUser.isVerified =>
         shutdown(getBot(event))
     }
   }
@@ -26,8 +27,8 @@ class AdminListener(botAdmins: Seq[String], helpText: String) extends ListenerAd
   override def onMessage(event: MessageEvent): Unit = {
     event.getMessage match {
       case string if string.equalsIgnoreCase("botsnack") => event.getChannel.send().message(":D")
-      case "!help" => event.getChannel.send().message(helpText)
-      case "!quit" if botAdmins.contains(event.getUser.getNick) && event.getUser.isVerified =>
+      case "!help" => event.getChannel.send().message(config.helpText)
+      case "!quit" if config.botAdmins.contains(event.getUser.getNick) && event.getUser.isVerified =>
         shutdown(getBot(event))
     }
   }

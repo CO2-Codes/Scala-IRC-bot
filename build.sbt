@@ -57,13 +57,14 @@ lazy val ircBot = project.in(file("."))
   .settings(
 
     libraryDependencies ++= Seq(
-      "org.pircbotx" % "pircbotx" % "2.1",
-      "com.github.pureconfig" %% "pureconfig" % "0.10.2",
-      "ch.qos.logback" % "logback-classic" % "1.2.3",
-      "com.typesafe.akka" %% "akka-http" % "10.1.7",
-      "com.typesafe.akka" %% "akka-actor" % "2.5.21",
-      "com.typesafe.akka" %% "akka-stream" % "2.5.21",
-      "org.scalatest" %% "scalatest" % "3.0.5" % "test",
+      "org.pircbotx"            % "pircbotx"        % "2.1",
+      "com.github.pureconfig"  %% "pureconfig"      % "0.10.2",
+      "ch.qos.logback"          % "logback-classic" % "1.2.3",
+      "com.typesafe.akka"      %% "akka-http"       % "10.1.7",
+      "com.typesafe.akka"      %% "akka-actor"      % "2.5.21",
+      "com.typesafe.akka"      %% "akka-stream"     % "2.5.21",
+      "org.apache.commons"      % "commons-text"    % "1.6",
+      "org.scalatest"          %% "scalatest"       % "3.0.5" % "test",
     )
     
   )
