@@ -2,22 +2,22 @@ package codes.co2.ircbot.listeners.links
 
 import codes.co2.ircbot.config.LinkListenerConfig
 import codes.co2.ircbot.http.HttpClient
-import org.pircbotx.hooks.ListenerAdapter
+import codes.co2.ircbot.listeners.GenericListener
 import org.pircbotx.hooks.events.{ActionEvent, MessageEvent}
 import org.pircbotx.hooks.types.GenericMessageEvent
 import org.pircbotx.{Channel, Colors}
 
 import scala.concurrent.ExecutionContext
 
-class LinkListener(httpClient: HttpClient, config: LinkListenerConfig)(implicit ec: ExecutionContext) extends ListenerAdapter {
+class LinkListener(httpClient: HttpClient, config: LinkListenerConfig, nicksToIgnore: Seq[String])(implicit ec: ExecutionContext) extends GenericListener(nicksToIgnore) {
 
   private val (boldTag, normalTag) = if (config.boldTitles.getOrElse(false)) (Colors.BOLD, Colors.NORMAL) else ("", "")
 
-  override def onMessage(event: MessageEvent): Unit = {
+  override def onAcceptedUserMsg(event: MessageEvent): Unit = {
     onMessageAndAction(event, event.getChannel)
   }
 
-  override def onAction(event: ActionEvent): Unit = {
+  override def onAcceptedUserAction(event: ActionEvent): Unit = {
     if (event.getChannel != null) {
       onMessageAndAction(event, event.getChannel)
     }

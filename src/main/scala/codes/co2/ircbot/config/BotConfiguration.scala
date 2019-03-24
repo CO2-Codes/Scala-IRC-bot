@@ -13,6 +13,7 @@ case class BotConfiguration(
                              channels: Seq[String],
                              fingerMsg: Option[String],
                              listeners: Seq[String],
+                             ignore: Option[Seq[String]],
                            )
 
 case class Connection(serverName: String, port: Int, ssl: Boolean)

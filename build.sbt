@@ -52,9 +52,13 @@ scalacOptions ++= Seq(
   "-Ywarn-unused:privates",            // Warn if a private member is unused.
   "-Ywarn-value-discard",              // Warn when non-Unit expression results are unused.
 )
+lazy val silencerVersion = "1.3.1"
 
 lazy val ircBot = project.in(file("."))
   .settings(
+    libraryDependencies += compilerPlugin(
+      "com.github.ghik"        %% "silencer-plugin" % silencerVersion
+    ),
 
     libraryDependencies ++= Seq(
       "org.pircbotx"            % "pircbotx"        % "2.1",
@@ -64,6 +68,7 @@ lazy val ircBot = project.in(file("."))
       "com.typesafe.akka"      %% "akka-actor"      % "2.5.21",
       "com.typesafe.akka"      %% "akka-stream"     % "2.5.21",
       "org.apache.commons"      % "commons-text"    % "1.6",
+      "com.github.ghik"        %% "silencer-lib"    % silencerVersion,
       "org.scalatest"          %% "scalatest"       % "3.0.5" % "test",
     )
     
