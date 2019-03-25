@@ -29,7 +29,7 @@ package object pircbotx {
       val ignoreList = config.ignore.getOrElse(Seq.empty)
 
       val listeners: Seq[Listener] = config.listeners.map{
-        case "adminListener" => new AdminListener(BotConfiguration.loadAdminListenerConfig(configPath), ignoreList)
+        case "adminListener" => new AdminListener(BotConfiguration.loadAdminListenerConfig(configPath), ignoreList, ac)
         case "linkListener" => new LinkListener(new HttpClient, BotConfiguration.loadLinkListenerConfig(configPath), ignoreList)
         case other => throw new Exception(s"$other is not a valid listener type.")
       }

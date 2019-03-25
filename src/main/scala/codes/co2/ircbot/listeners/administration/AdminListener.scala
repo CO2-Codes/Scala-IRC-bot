@@ -1,12 +1,13 @@
 package codes.co2.ircbot.listeners.administration
 
+import akka.actor.ActorSystem
 import codes.co2.ircbot.config.AdminListenerConfig
 import codes.co2.ircbot.listeners.GenericListener
 import org.pircbotx.PircBotX
 import org.pircbotx.hooks.Event
 import org.pircbotx.hooks.events.{ConnectEvent, MessageEvent, PrivateMessageEvent}
 
-class AdminListener(config: AdminListenerConfig, nicksToIgnore: Seq[String]) extends GenericListener(nicksToIgnore) {
+class AdminListener(config: AdminListenerConfig, nicksToIgnore: Seq[String], actorSystem: ActorSystem) extends GenericListener(nicksToIgnore) {
 
   // Scala doesn't seem to like Java's Generics very much...
   private def getBot(event: Event): PircBotX = {
@@ -37,7 +38,9 @@ class AdminListener(config: AdminListenerConfig, nicksToIgnore: Seq[String]) ext
   private def shutdown(bot: PircBotX): Unit = {
     bot.stopBotReconnect()
     bot.sendIRC().quitServer("I don't wanna go...")
-    System.exit(0)
+    actorSystem.terminate()
+    ()
+
   }
 
 }

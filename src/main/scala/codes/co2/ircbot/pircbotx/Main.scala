@@ -4,7 +4,6 @@ import java.nio.file.Paths
 
 import akka.actor.ActorSystem
 import codes.co2.ircbot.config.BotConfiguration
-import codes.co2.ircbot.http.HttpClient
 import org.pircbotx.{Configuration, PircBotX}
 import org.slf4j.{Logger, LoggerFactory}
 
@@ -25,8 +24,6 @@ object Main extends App {
 
   implicit val actorSystem: ActorSystem = ActorSystem()
   implicit val ec: ExecutionContext = actorSystem.dispatcher
-
-  val client = new HttpClient
 
   def pircConfiguration: Configuration = {
     new Configuration.Builder()
