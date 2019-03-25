@@ -11,7 +11,10 @@ object TitleParser {
     val endTagIdx = lowerCase.indexOf("</title>")
 
     if (startTagIdx >= 0 && endTagIdx > startTagIdx) {
-      Some(page.substring(startTagIdx + 7, endTagIdx)).map(StringEscapeUtils.unescapeHtml4).map(stripSpecialChars)
+      Some(page.substring(startTagIdx + 7, endTagIdx))
+        .map(StringEscapeUtils.unescapeHtml4)
+        .map(stripSpecialChars)
+        .map(title => title.trim) // Trim whitespace
     } else None
 
   }

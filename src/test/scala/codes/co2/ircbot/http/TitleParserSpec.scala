@@ -28,4 +28,8 @@ class TitleParserSpec extends FlatSpec with Matchers {
     TitleParser.findTitle("<title>&quot; &gt; &euro;</title>") should be(Some("\" > €"))
   }
 
+  "findTitle" should "trim whitespace" in {
+    TitleParser.findTitle("<title>      test       </title>") should be(Some("test"))
+  }
+
 }
