@@ -6,10 +6,13 @@ import codes.co2.ircbot.listeners.GenericListener
 import org.pircbotx.hooks.events.{ActionEvent, MessageEvent}
 import org.pircbotx.hooks.types.GenericMessageEvent
 import org.pircbotx.{Channel, Colors}
+import org.slf4j.{Logger, LoggerFactory}
 
 import scala.concurrent.ExecutionContext
 
 class LinkListener(httpClient: HttpClient, config: LinkListenerConfig, nicksToIgnore: Seq[String])(implicit ec: ExecutionContext) extends GenericListener(nicksToIgnore) {
+  val log: Logger = LoggerFactory.getLogger(getClass)
+
 
   private val (boldTag, normalTag) = if (config.boldTitles.getOrElse(false)) (Colors.BOLD, Colors.NORMAL) else ("", "")
 
@@ -28,8 +31,10 @@ class LinkListener(httpClient: HttpClient, config: LinkListenerConfig, nicksToIg
     val lowerCase = eventMessage.toLowerCase()
 
     if (lowerCase.contains("http://") || lowerCase.contains("https://")) {
-      LinkParser.findLink(eventMessage).map(httpClient.getTitle).map(_.map(_.foreach(title => channel.send()
-        .message(s"$boldTag$title$normalTag"))))
+      LinkParser.findLink(eventMessage).map(httpClient.getTitle).map(_.map(_.foreach(title => {
+        log.info(s"Sending $title to ${channel.getName}")
+        channel.send().message(s"$boldTag$title$normalTag")
+      })))
 
     }
     ()

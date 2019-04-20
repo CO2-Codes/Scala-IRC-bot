@@ -17,7 +17,12 @@ class HttpClient(implicit system: ActorSystem) {
   implicit val mat: ActorMaterializer = ActorMaterializer()
 
   def getTitle(url: String): Future[Option[String]] = {
-    getPage(url).map(pageOpt => pageOpt.flatMap(page => TitleParser.findTitle(page)))
+    getPage(url).map(pageOpt => pageOpt.flatMap(page =>
+      {
+        val titleOpt = TitleParser.findTitle(page)
+        log.info(s"Title of page $url: $titleOpt")
+        titleOpt
+      }))
   }
 
   def getPage(url: String, alreadyRedirected: Boolean = false): Future[Option[String]] = {
