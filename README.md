@@ -12,8 +12,9 @@ To run the bot without making a jar, use `sbt "run <path/to/configfile>"`
 In the configuration file, the array of `bot-admins` is used to decide who is allowed to run admin-only commands (currently
  only !quit in the adminListener). The separate `puppet-masters` array is used to decide who may puppet the bot.
   
-The `listeners` array is the most important. This decides which functionality your
- instance of the bot will have.
+The `listeners` array is the most important. This decides which functionality your instance of the bot will have.
+Every listener has an ignore-channels settings which can be used to ignore all messages from those channels for that
+specific listener.
  
 ## Available listeners
 

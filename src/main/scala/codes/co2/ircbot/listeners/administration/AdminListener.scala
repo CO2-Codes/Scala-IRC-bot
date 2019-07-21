@@ -7,7 +7,9 @@ import org.pircbotx.PircBotX
 import org.pircbotx.hooks.Event
 import org.pircbotx.hooks.events.{ConnectEvent, MessageEvent, PrivateMessageEvent}
 
-class AdminListener(config: AdminListenerConfig, nicksToIgnore: Seq[String], actorSystem: ActorSystem) extends GenericListener(nicksToIgnore) {
+class AdminListener(config: AdminListenerConfig, nicksToIgnore: Seq[String], actorSystem: ActorSystem) extends GenericListener(config, nicksToIgnore) {
+
+  private val puppetMasters = config.puppetMasters.getOrElse(Seq.empty)
 
   // Scala doesn't seem to like Java's Generics very much...
   private def getBot(event: Event): PircBotX = {
@@ -24,7 +26,7 @@ class AdminListener(config: AdminListenerConfig, nicksToIgnore: Seq[String], act
       case "!quit" if config.botAdmins.contains(event.getUser.getNick) && event.getUser.isVerified =>
         shutdown(getBot(event))
 
-      case msg if config.puppetMasters.contains(event.getUser.getNick) && event.getUser.isVerified &&
+      case msg if puppetMasters.contains(event.getUser.getNick) && event.getUser.isVerified &&
         (msg.startsWith("!say") || msg.startsWith("!act")) =>
         val command = msg.split(" ", 3)
         command.headOption match {

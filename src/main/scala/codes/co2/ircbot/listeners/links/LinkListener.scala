@@ -10,7 +10,7 @@ import org.slf4j.{Logger, LoggerFactory}
 
 import scala.concurrent.ExecutionContext
 
-class LinkListener(httpClient: HttpClient, config: LinkListenerConfig, nicksToIgnore: Seq[String])(implicit ec: ExecutionContext) extends GenericListener(nicksToIgnore) {
+class LinkListener(httpClient: HttpClient, config: LinkListenerConfig, nicksToIgnore: Seq[String])(implicit ec: ExecutionContext) extends GenericListener(config, nicksToIgnore) {
   val log: Logger = LoggerFactory.getLogger(getClass)
 
 

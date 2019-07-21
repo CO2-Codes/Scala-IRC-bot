@@ -18,9 +18,14 @@ case class BotConfiguration(
 
 case class Connection(serverName: String, port: Int, ssl: Boolean)
 
-case class LinkListenerConfig(boldTitles: Option[Boolean])
+trait ListenerConfig{
+  val ignoreChannels: Option[Seq[String]]
+  val ignoredChannels: Seq[String] = ignoreChannels.getOrElse(Seq.empty)
+}
 
-case class AdminListenerConfig(helpText: String, botAdmins: Seq[String], puppetMasters: Seq[String])
+case class LinkListenerConfig(boldTitles: Option[Boolean], ignoreChannels: Option[Seq[String]]) extends ListenerConfig
+
+case class AdminListenerConfig(helpText: String, botAdmins: Seq[String], puppetMasters: Option[Seq[String]], ignoreChannels: Option[Seq[String]]) extends ListenerConfig
 
 object BotConfiguration {
   val log: Logger = LoggerFactory.getLogger(getClass)
@@ -31,13 +36,13 @@ object BotConfiguration {
   def loadLinkListenerConfig(path: Path): LinkListenerConfig = pureconfig.loadConfig[LinkListenerConfig](path, "link-listener")
     .fold(failures => {
       log.info(s"Could not load admin-listener config, reason ${failures.toList.map(_.description)} Using default config.")
-      LinkListenerConfig(None)
+      LinkListenerConfig(None, None)
     }, success => success)
 
   def loadAdminListenerConfig(path: Path): AdminListenerConfig = pureconfig.loadConfig[AdminListenerConfig](path, "admin-listener")
     .fold(failures => {
       log.info(s"Could not load admin-listener config, reason ${failures.toList.map(_.description)} Using default config.")
-      AdminListenerConfig("", Seq.empty, Seq.empty)
+      AdminListenerConfig("", Seq.empty, None, None)
     }, success => success)
 
 
