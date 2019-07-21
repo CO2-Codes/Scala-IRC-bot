@@ -1,5 +1,7 @@
 name := "Scala-IRC-bot"
 
+version := "0.2.0"
+
 scalaVersion := "2.13.0"
 
 // Recommended flags from https://tpolecat.github.io/2017/04/25/scalac-flags.html (Removed scala 2.13 deprecated flags)
