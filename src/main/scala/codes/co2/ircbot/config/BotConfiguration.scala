@@ -20,7 +20,7 @@ case class Connection(serverName: String, port: Int, ssl: Boolean)
 
 case class LinkListenerConfig(boldTitles: Option[Boolean])
 
-case class AdminListenerConfig(helpText: String, botAdmins: Seq[String])
+case class AdminListenerConfig(helpText: String, botAdmins: Seq[String], puppetMasters: Seq[String])
 
 object BotConfiguration {
   val log: Logger = LoggerFactory.getLogger(getClass)
@@ -37,7 +37,7 @@ object BotConfiguration {
   def loadAdminListenerConfig(path: Path): AdminListenerConfig = pureconfig.loadConfig[AdminListenerConfig](path, "admin-listener")
     .fold(failures => {
       log.info(s"Could not load admin-listener config, reason ${failures.toList.map(_.description)} Using default config.")
-      AdminListenerConfig("", Seq.empty)
+      AdminListenerConfig("", Seq.empty, Seq.empty)
     }, success => success)
 
 

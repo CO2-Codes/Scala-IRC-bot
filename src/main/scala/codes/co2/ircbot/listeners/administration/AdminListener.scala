@@ -23,6 +23,16 @@ class AdminListener(config: AdminListenerConfig, nicksToIgnore: Seq[String], act
     event.getMessage match {
       case "!quit" if config.botAdmins.contains(event.getUser.getNick) && event.getUser.isVerified =>
         shutdown(getBot(event))
+
+      case msg if config.puppetMasters.contains(event.getUser.getNick) && event.getUser.isVerified &&
+        (msg.startsWith("!say") || msg.startsWith("!act")) =>
+        val command = msg.split(" ", 3)
+        command.headOption match {
+          case Some("!say") if command.sizeIs >= 2 =>
+            getBot(event).send().message(command(1), command(2))
+          case Some("!act") if command.sizeIs >= 2 =>
+            getBot(event).send().action(command(1), command(2))
+        }
     }
   }
 
