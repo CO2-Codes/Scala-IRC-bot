@@ -10,7 +10,7 @@ import codes.co2.ircbot.listeners.links.LinkListener
 import org.pircbotx.hooks.Listener
 import org.pircbotx.{Configuration, UtilSSLSocketFactory}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.ExecutionContext
 
 package object pircbotx {

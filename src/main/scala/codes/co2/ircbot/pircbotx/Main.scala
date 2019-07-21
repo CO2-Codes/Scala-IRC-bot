@@ -7,13 +7,13 @@ import codes.co2.ircbot.config.BotConfiguration
 import org.pircbotx.{Configuration, PircBotX}
 import org.slf4j.{Logger, LoggerFactory}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.ExecutionContext
 
 object Main extends App {
   val log: Logger = LoggerFactory.getLogger(getClass)
 
-  if (args.length != 1) {
+  if (args.sizeIs != 1) {
     log.error("Please have (only) the path to the .conf file as a command line argument")
     System.exit(1)
   }
