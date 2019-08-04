@@ -44,7 +44,9 @@ class HttpClient(implicit system: ActorSystem) {
             Future.successful(None)
         }
 
-        response.discardEntityBytes()
+        // Discarding entitybytes only after completing the future to prevent rare race conditions.
+        result.onComplete(_ => response.discardEntityBytes())
+
         result
       })
   }
