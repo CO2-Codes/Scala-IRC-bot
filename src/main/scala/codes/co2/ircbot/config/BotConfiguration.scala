@@ -44,7 +44,7 @@ object BotConfiguration {
   def loadLinkListenerConfig(path: Path): LinkListenerConfig = ConfigSource.default(ConfigSource.file(path))
     .at("link-listener").load[LinkListenerConfig]
     .fold(failures => {
-      log.info(s"Could not load admin-listener config, reason ${failures.toList.map(_.description)} Using default config.")
+      log.info(s"Could not load link-listener config, reason ${failures.toList.map(_.description)} Using default config.")
       LinkListenerConfig(None, None)
     }, success => success)
 
