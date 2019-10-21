@@ -71,6 +71,10 @@ class HttpClient(implicit system: ActorSystem) {
       }
 
     ).runWith(Sink.fold(ByteString.empty)(_ ++ _)).map(byteString => Some(byteString.utf8String))
+    }.recover {
+    case t: Throwable =>
+      log.error("Future failed in downloadHead, error", t)
+      throw t
   }
 
   private def redirect(url: String, response: HttpResponse) = {

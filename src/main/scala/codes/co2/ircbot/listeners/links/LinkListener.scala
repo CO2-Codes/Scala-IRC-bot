@@ -34,7 +34,12 @@ class LinkListener(httpClient: HttpClient, config: LinkListenerConfig, nicksToIg
       LinkParser.findLink(eventMessage).map(httpClient.getTitle).map(_.map(_.foreach(title => {
         log.info(s"Sending $title to ${channel.getName}")
         channel.send().message(s"$boldTag$title$normalTag")
-      })))
+      })).recover {
+        case t: Throwable =>
+          log.error("Future failed in linkListener, error", t)
+          throw t
+      }
+      )
 
     }
     ()
