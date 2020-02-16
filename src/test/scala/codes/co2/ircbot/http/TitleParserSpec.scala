@@ -1,8 +1,9 @@
 package codes.co2.ircbot.http
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class TitleParserSpec extends FlatSpec with Matchers {
+class TitleParserSpec extends AnyFlatSpec with Matchers {
 
   "findTitle" should "return the first title in the document" in {
 

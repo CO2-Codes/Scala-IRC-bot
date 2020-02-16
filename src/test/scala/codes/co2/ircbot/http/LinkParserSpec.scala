@@ -1,9 +1,10 @@
 package codes.co2.ircbot.http
 
 import codes.co2.ircbot.listeners.links.LinkParser
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class LinkParserSpec extends FlatSpec with Matchers {
+class LinkParserSpec extends AnyFlatSpec with Matchers {
 
   "findLink" should "return the first link in the message" in {
 

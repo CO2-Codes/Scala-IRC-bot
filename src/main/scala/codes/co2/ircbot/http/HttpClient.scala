@@ -3,7 +3,6 @@ package codes.co2.ircbot.http
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
-import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Sink
 import akka.util.ByteString
 import org.slf4j.{Logger, LoggerFactory}
@@ -14,7 +13,6 @@ class HttpClient(implicit system: ActorSystem) {
 
   val log: Logger = LoggerFactory.getLogger(getClass)
   implicit val ec: ExecutionContext = system.dispatcher
-  implicit val mat: ActorMaterializer = ActorMaterializer()
 
   def getTitle(url: String): Future[Option[String]] = {
     getPage(url).map(pageOpt => pageOpt.flatMap(page =>
