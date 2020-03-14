@@ -14,25 +14,25 @@ case class BotConfiguration(
                              channels: Seq[String],
                              fingerMsg: Option[String],
                              listeners: Seq[String],
-                             ignore: Option[Seq[String]],
+                             generalConfig: GeneralConfig,
                            )
 
 case class Connection(serverName: String, port: Int, ssl: Boolean)
 
-trait ListenerConfig {
-  val ignoreChannels: Option[Seq[String]]
+case class GeneralConfig(
+                          ignoreNicks: Option[Seq[String]],
+                          ignoreChannels: Option[Seq[String]],
+                          botAdmins: Seq[String],
+                        ) {
   val ignoredChannels: Seq[String] = ignoreChannels.getOrElse(Seq.empty)
+  val ignoredNicks: Seq[String] = ignoreNicks.getOrElse(Seq.empty)
 }
 
-case class LinkListenerConfig(
-                               boldTitles: Option[Boolean],
-                               ignoreChannels: Option[Seq[String]]) extends ListenerConfig
+case class LinkListenerConfig(boldTitles: Option[Boolean])
 
-case class AdminListenerConfig(
-                                helpText: String,
-                                botAdmins: Seq[String],
-                                puppetMasters: Option[Seq[String]],
-                                ignoreChannels: Option[Seq[String]]) extends ListenerConfig
+case class AdminListenerConfig(helpText: String, puppetMasters: Option[Seq[String]])
+
+case class PronounListenerConfig(filePath: String)
 
 object BotConfiguration {
   val log: Logger = LoggerFactory.getLogger(getClass)
@@ -45,15 +45,21 @@ object BotConfiguration {
     .at("link-listener").load[LinkListenerConfig]
     .fold(failures => {
       log.info(s"Could not load link-listener config, reason ${failures.toList.map(_.description)} Using default config.")
-      LinkListenerConfig(None, None)
+      LinkListenerConfig(None)
     }, success => success)
 
   def loadAdminListenerConfig(path: Path): AdminListenerConfig = ConfigSource.default(ConfigSource.file(path))
     .at("admin-listener").load[AdminListenerConfig]
     .fold(failures => {
       log.info(s"Could not load admin-listener config, reason ${failures.toList.map(_.description)} Using default config.")
-      AdminListenerConfig("", Seq.empty, None, None)
+      AdminListenerConfig("", None)
     }, success => success)
 
+    def loadPronounListenerConfig(path: Path): PronounListenerConfig = ConfigSource.default(ConfigSource.file(path))
+      .at("pronoun-listener").load[PronounListenerConfig]
+      .fold(failures => {
+        log.info(s"Could not load pronoun-listener config, reason ${failures.toList.map(_.description)} Using default config.")
+        PronounListenerConfig("pronouns.txt")
+      }, success => success)
 
 }

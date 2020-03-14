@@ -11,8 +11,8 @@ To run the bot without making a jar, use `sbt "run <path/to/configfile>"`
 
 This bot is tested on openJDK 11.
 
-In the configuration file, the array of `bot-admins` is used to decide who is allowed to run admin-only commands (currently
- only !quit in the adminListener). The separate `puppet-masters` array is used to decide who may puppet the bot.
+In the configuration file, the array of `bot-admins` is used to decide who is allowed to run admin-only commands.
+The separate `puppet-masters` array is used to decide who may puppet the bot.
   
 The `listeners` array is the most important. This decides which functionality your instance of the bot will have.
 Every listener has an ignore-channels settings which can be used to ignore all messages from those channels for that
@@ -32,3 +32,7 @@ given channel or anything, use at your discretion.
 ### linkListener
 This listener reacts to messages and actions containing http/https links. It attempts to retrieve the <title> tag in
 html pages and if it can find one, it will send the title to the channel.
+
+### pronounListener
+This listener stores users' personal pronouns (he, she, they, it, other) and can be used to look up the pronouns. It
+writes these into a file to keep them between restarts.

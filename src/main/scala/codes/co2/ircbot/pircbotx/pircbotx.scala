@@ -7,6 +7,7 @@ import codes.co2.ircbot.config.BotConfiguration
 import codes.co2.ircbot.http.HttpClient
 import codes.co2.ircbot.listeners.administration.AdminListener
 import codes.co2.ircbot.listeners.links.LinkListener
+import codes.co2.ircbot.listeners.pronouns.PronounListener
 import org.pircbotx.hooks.Listener
 import org.pircbotx.{Configuration, UtilSSLSocketFactory}
 
@@ -26,11 +27,11 @@ package object pircbotx {
     }
 
     def addListeners(config: BotConfiguration, configPath: Path)(implicit ac: ActorSystem, ec: ExecutionContext): Configuration.Builder = {
-      val ignoreList = config.ignore.getOrElse(Seq.empty)
 
       val listeners: Seq[Listener] = config.listeners.map{
-        case "adminListener" => new AdminListener(BotConfiguration.loadAdminListenerConfig(configPath), ignoreList, ac)
-        case "linkListener" => new LinkListener(new HttpClient, BotConfiguration.loadLinkListenerConfig(configPath), ignoreList)
+        case "adminListener" => new AdminListener(BotConfiguration.loadAdminListenerConfig(configPath), config.generalConfig)
+        case "linkListener" => new LinkListener(new HttpClient, BotConfiguration.loadLinkListenerConfig(configPath), config.generalConfig)
+        case "pronounListener" => new PronounListener(BotConfiguration.loadPronounListenerConfig(configPath), config.generalConfig)
         case other => throw new Exception(s"$other is not a valid listener type.")
       }
 
