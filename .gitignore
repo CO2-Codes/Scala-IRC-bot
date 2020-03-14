@@ -3,3 +3,6 @@ target/
 
 # IntelliJ
 .idea
+
+# Do not accidentally check in this file if the default example.conf is used and it's created here
+pronouns.txt

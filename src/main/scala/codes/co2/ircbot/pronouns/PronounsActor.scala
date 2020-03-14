@@ -16,7 +16,7 @@ class PronounsActor(file: File) extends Actor with ActorLogging {
     if (pronouns.isEmpty) {
       s"$name has no pronouns set."
     } else {
-      val pronounString = pronouns.foldLeft("") { case (soFar, next) => s"$soFar  ${next.description};" }.init
+      val pronounString = pronouns.foldLeft("") { case (soFar, next) => s"$soFar ${next.description}," }.init
       s"$name's pronouns are:$pronounString."
     }
   }
@@ -135,22 +135,22 @@ object PronounsActor {
 
     case object He extends Pronoun {
       override val letter: Char = 'm' // male
-      override val description: String = "he, him, his"
+      override val description: String = "he/him"
     }
 
     case object She extends Pronoun {
       override val letter: Char = 'f' // female
-      override val description: String = "she, her, her"
+      override val description: String = "she/her"
     }
 
     case object They extends Pronoun {
       override val letter: Char = 'n' // neutral
-      override val description: String = "they, them, their"
+      override val description: String = "they/them"
     }
 
     case object It extends Pronoun {
       override val letter: Char = 'i' // inanimate
-      override val description: String = "it, it, its"
+      override val description: String = "it/its"
     }
 
     case object Other extends Pronoun {
