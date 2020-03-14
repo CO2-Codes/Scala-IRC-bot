@@ -1,8 +1,8 @@
 name := "Scala-IRC-bot"
 
-version := "0.2.3"
+version := "0.3.0"
 
-scalaVersion := "2.13.0"
+scalaVersion := "2.13.1"
 
 // Recommended flags from https://tpolecat.github.io/2017/04/25/scalac-flags.html (Removed scala 2.13 deprecated flags)
 scalacOptions ++= Seq(
@@ -43,24 +43,24 @@ scalacOptions ++= Seq(
   "-Ywarn-unused:privates",            // Warn if a private member is unused.
   "-Ywarn-value-discard",              // Warn when non-Unit expression results are unused.
 )
-lazy val silencerVersion = "1.4.2"
+lazy val silencerVersion = "1.6.0"
 
 lazy val ircBot = project.in(file("."))
   .settings(
     libraryDependencies += compilerPlugin(
-      "com.github.ghik"        %% "silencer-plugin" % silencerVersion
+      "com.github.ghik"        %% "silencer-plugin" % silencerVersion cross CrossVersion.full
     ),
 
     libraryDependencies ++= Seq(
       "org.pircbotx"            % "pircbotx"        % "2.1",
-      "com.github.pureconfig"  %% "pureconfig"      % "0.12.2",
+      "com.github.pureconfig"  %% "pureconfig"      % "0.12.3",
       "ch.qos.logback"          % "logback-classic" % "1.2.3",
       "com.typesafe.akka"      %% "akka-http"       % "10.1.11",
-      "com.typesafe.akka"      %% "akka-actor"      % "2.6.3",
-      "com.typesafe.akka"      %% "akka-stream"     % "2.6.3",
+      "com.typesafe.akka"      %% "akka-actor"      % "2.6.4",
+      "com.typesafe.akka"      %% "akka-stream"     % "2.6.4",
       "org.apache.commons"      % "commons-text"    % "1.8",
-      "com.github.ghik"        %% "silencer-lib"    % silencerVersion,
-      "org.scalatest"          %% "scalatest"       % "3.1.0" % "test",
+      "com.github.ghik"        %% "silencer-lib"    % silencerVersion % Provided cross CrossVersion.full,
+      "org.scalatest"          %% "scalatest"       % "3.1.1" % "test",
     )
     
   )

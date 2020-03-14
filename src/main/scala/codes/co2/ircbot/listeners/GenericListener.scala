@@ -1,13 +1,16 @@
 package codes.co2.ircbot.listeners
 
-import codes.co2.ircbot.config.ListenerConfig
+import codes.co2.ircbot.config.GeneralConfig
 import com.github.ghik.silencer.silent
+import org.pircbotx.PircBotX
 import org.pircbotx.hooks.ListenerAdapter
 import org.pircbotx.hooks.events.{ActionEvent, MessageEvent, PrivateMessageEvent}
-import org.pircbotx.hooks.types.GenericChannelUserEvent
+import org.pircbotx.hooks.types.{GenericChannelUserEvent, GenericEvent}
 
-abstract class GenericListener(config: ListenerConfig, nicksToIgnore: Seq[String]) extends ListenerAdapter {
+abstract class GenericListener(config: GeneralConfig) extends ListenerAdapter {
   private val channelsToIgnore = config.ignoredChannels
+  private val nicksToIgnore = config.ignoredNicks
+  protected val admins: Seq[String] = config.botAdmins
 
   private def sentInIgnoredChannel(event: GenericChannelUserEvent): Boolean = {
     // Wrap in an option because getChannel returns null for PM action events.
@@ -31,4 +34,13 @@ abstract class GenericListener(config: ListenerConfig, nicksToIgnore: Seq[String
   final override def onMessage(event: MessageEvent): Unit = {
     if (!nicksToIgnore.contains(event.getUser.getNick) && !sentInIgnoredChannel(event)) onAcceptedUserMsg(event)
   }
+}
+
+object GenericListener {
+
+  // Scala doesn't seem to like Java's Generics very much...
+  def getBot(event: GenericEvent): PircBotX = {
+    event.getBot[PircBotX]
+  }
+
 }

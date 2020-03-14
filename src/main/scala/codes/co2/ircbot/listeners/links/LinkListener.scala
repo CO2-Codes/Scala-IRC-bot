@@ -1,6 +1,6 @@
 package codes.co2.ircbot.listeners.links
 
-import codes.co2.ircbot.config.LinkListenerConfig
+import codes.co2.ircbot.config.{GeneralConfig, LinkListenerConfig}
 import codes.co2.ircbot.http.HttpClient
 import codes.co2.ircbot.listeners.GenericListener
 import org.pircbotx.hooks.events.{ActionEvent, MessageEvent}
@@ -10,7 +10,7 @@ import org.slf4j.{Logger, LoggerFactory}
 
 import scala.concurrent.ExecutionContext
 
-class LinkListener(httpClient: HttpClient, config: LinkListenerConfig, nicksToIgnore: Seq[String])(implicit ec: ExecutionContext) extends GenericListener(config, nicksToIgnore) {
+class LinkListener(httpClient: HttpClient, config: LinkListenerConfig, generalConfig: GeneralConfig)(implicit ec: ExecutionContext) extends GenericListener(generalConfig) {
   val log: Logger = LoggerFactory.getLogger(getClass)
 
 
