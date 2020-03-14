@@ -19,6 +19,7 @@ class AdminListener(config: AdminListenerConfig, generalConfig: GeneralConfig)(i
   override def onAcceptedUserPrivateMsg(event: PrivateMessageEvent): Unit = {
     if (event.getMessage.startsWith("!")) {
       event.getMessage match {
+        case "!help" => event.respondWith(config.helpText)
         case "!quit" if admins.contains(event.getUser.getNick) && event.getUser.isVerified =>
           shutdown(getBot(event))
 
@@ -38,7 +39,7 @@ class AdminListener(config: AdminListenerConfig, generalConfig: GeneralConfig)(i
   override def onAcceptedUserMsg(event: MessageEvent): Unit = {
     if (event.getMessage.startsWith("!")) {
       event.getMessage match {
-        case "!help" => event.getChannel.send().message(config.helpText)
+        case "!help" => event.respondWith(config.helpText)
         case "!quit" if admins.contains(event.getUser.getNick) && event.getUser.isVerified =>
           shutdown(getBot(event))
       }
