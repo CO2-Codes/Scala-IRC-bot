@@ -36,3 +36,8 @@ html pages and if it can find one, it will send the title to the channel.
 ### pronounListener
 This listener stores users' personal pronouns (he, she, they, it, other) and can be used to look up the pronouns. It
 writes these into a file to keep them between restarts.
+
+### User documentation
+If you want to run your own instance of the bot please host your own documentation specific to that instance.
+Feel free to use [Isaac's documentation](https://co2.codes/xkcd/isaac-docs.php) (the original instance of this bot)
+as a basis for your own. 
