@@ -14,7 +14,7 @@ class PronounsActor(file: File) extends Actor with ActorLogging {
 
   private def pronounsToString(name: String, pronouns: Set[Pronoun]) = {
     if (pronouns.isEmpty) {
-      s"$name has no pronouns set."
+      s"$name has no pronouns set. See !help for info on how to set them."
     } else {
       val pronounString = pronouns.foldLeft("") { case (soFar, next) => s"$soFar ${next.description}," }.init
       s"$name's pronouns are:$pronounString."
