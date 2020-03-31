@@ -46,7 +46,12 @@ class PronounListener(config: PronounListenerConfig, generalConfig: GeneralConfi
       val splitByWords = msg.split(" ")
 
       splitByWords.head match {
-        case "!pronouns" if splitByWords.length > 1 => pronounsActor ! Get(splitByWords(1), event)
+          /* This first case uses getNick instead of getNickservNick because for a get, verifying it's the right person
+          is not worth an extra /whois */
+        case "!pronouns" if splitByWords.length == 1 => pronounsActor ! Get(event.getUser.getNick, event)
+
+
+        case "!pronouns" => pronounsActor ! Get(splitByWords(1), event)
 
         case "!pronouns-add" if splitByWords.length > 1 =>
           getPronoun(splitByWords(1), event)

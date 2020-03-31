@@ -1,6 +1,6 @@
 name := "Scala-IRC-bot"
 
-version := "0.3.0"
+version := "0.3.1"
 
 scalaVersion := "2.13.1"
 
