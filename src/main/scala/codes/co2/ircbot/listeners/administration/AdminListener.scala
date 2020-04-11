@@ -5,9 +5,11 @@ import codes.co2.ircbot.config.{AdminListenerConfig, GeneralConfig}
 import codes.co2.ircbot.listeners.GenericListener
 import codes.co2.ircbot.listeners.GenericListener._
 import org.pircbotx.PircBotX
-import org.pircbotx.hooks.events.{ConnectEvent, MessageEvent, PrivateMessageEvent}
+import org.pircbotx.hooks.events.{ConnectEvent, ExceptionEvent, ListenerExceptionEvent, MessageEvent, PrivateMessageEvent}
+import org.slf4j.{Logger, LoggerFactory}
 
 class AdminListener(config: AdminListenerConfig, generalConfig: GeneralConfig)(implicit actorSystem: ActorSystem) extends GenericListener(generalConfig) {
+  val log: Logger = LoggerFactory.getLogger(getClass)
 
   private val puppetMasters = config.puppetMasters.getOrElse(Seq.empty)
 
@@ -45,6 +47,16 @@ class AdminListener(config: AdminListenerConfig, generalConfig: GeneralConfig)(i
       }
     } else if (event.getMessage.equalsIgnoreCase("botsnack")) {
       event.getChannel.send().message(":D")
+    }
+  }
+
+  // As it turns out the bot swallows exceptions and instead of logging them, expects you to do this using this listener
+  // method.
+  override def onException(event: ExceptionEvent): Unit = {
+    event match {
+      case lExEvent: ListenerExceptionEvent =>
+        log.error(s"Got an exception from ${lExEvent.getListener} on event ${lExEvent.getSourceEvent}, exception: ${lExEvent.getException}")
+      case _ => log.error(s"Got a bot exception event, exception: ${event.getException}, message: ${event.getMessage}")
     }
   }
 

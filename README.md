@@ -24,6 +24,8 @@ specific listener.
 This should always be on. It sets the +B (bot user mode that many IRC servers require) on connect, and it listens to
 !help messages, and !quit messages from bot-admins. 
 
+It also listens to errors from other listeners and logs them.
+
 This listener also contains the puppet-master functionality:
 Use !say #channelname message or !act #channelname message to have the bot send these messages to the channel.
 Instead of channel names nicknames can be used for PMs. Note: There's no check in place to see if the bot is in the
