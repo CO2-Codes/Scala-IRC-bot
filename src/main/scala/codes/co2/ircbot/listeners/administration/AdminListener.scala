@@ -34,6 +34,7 @@ class AdminListener(config: AdminListenerConfig, generalConfig: GeneralConfig)(i
             case Some("!act") if command.sizeIs >= 2 =>
               getBot(event).send().action(command(1), command(2))
           }
+        case _ => ()
       }
     }
   }
@@ -44,6 +45,7 @@ class AdminListener(config: AdminListenerConfig, generalConfig: GeneralConfig)(i
         case "!help" => event.respondWith(config.helpText)
         case "!quit" if admins.contains(event.getUser.getNick) && event.getUser.isVerified =>
           shutdown(getBot(event))
+        case _ => ()
       }
     } else if (event.getMessage.equalsIgnoreCase("botsnack")) {
       event.getChannel.send().message(":D")
