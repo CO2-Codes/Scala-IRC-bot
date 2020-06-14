@@ -4,11 +4,12 @@ import java.nio.file.Paths
 
 import akka.actor.ActorSystem
 import codes.co2.ircbot.config.BotConfiguration
+import org.pircbotx.delay.AdaptingDelay
 import org.pircbotx.{Configuration, PircBotX}
 import org.slf4j.{Logger, LoggerFactory}
 
-import scala.jdk.CollectionConverters._
 import scala.concurrent.ExecutionContext
+import scala.jdk.CollectionConverters._
 
 object Main extends App {
   val log: Logger = LoggerFactory.getLogger(getClass)
@@ -29,7 +30,7 @@ object Main extends App {
     new Configuration.Builder()
       .addServer(config.connection.serverName, config.connection.port).setSocket(config.connection.ssl)
       .addAutoJoinChannels(config.channels.asJava)
-      .setAutoReconnect(true).setAutoReconnectAttempts(5).setAutoReconnectDelay(0)
+      .setAutoReconnect(true).setAutoReconnectAttempts(5).setAutoReconnectDelay(new AdaptingDelay(1, 120000))
       .setAutoSplitMessage(false)
       .setFinger(config.fingerMsg)
       .setLogin(config.nickname)
@@ -43,4 +44,5 @@ object Main extends App {
 
   val bot = new PircBotX(pircConfiguration)
   bot.startBot()
+
 }

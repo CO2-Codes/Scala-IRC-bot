@@ -5,6 +5,7 @@ import java.nio.file.Path
 import org.slf4j.{Logger, LoggerFactory}
 import pureconfig.ConfigSource
 import pureconfig.generic.auto._ // IntelliJ might see this as an unused import. IntelliJ is wrong.
+import com.danielasfregola.twitter4s.entities.{AccessToken, ConsumerToken}
 
 case class BotConfiguration(
                              connection: Connection,
@@ -28,7 +29,9 @@ case class GeneralConfig(
   val ignoredNicks: Seq[String] = ignoreNicks.getOrElse(Seq.empty)
 }
 
-case class LinkListenerConfig(boldTitles: Option[Boolean])
+case class TwitterApi(consumerToken: ConsumerToken, accessToken: AccessToken)
+
+case class LinkListenerConfig(boldTitles: Option[Boolean], twitterApi: Option[TwitterApi], youtubeApiKey: Option[String])
 
 case class AdminListenerConfig(helpText: String, puppetMasters: Option[Seq[String]])
 
@@ -45,7 +48,7 @@ object BotConfiguration {
     .at("link-listener").load[LinkListenerConfig]
     .fold(failures => {
       log.info(s"Could not load link-listener config, reason ${failures.toList.map(_.description)} Using default config.")
-      LinkListenerConfig(None)
+      LinkListenerConfig(None, None, None)
     }, success => success)
 
   def loadAdminListenerConfig(path: Path): AdminListenerConfig = ConfigSource.default(ConfigSource.file(path))

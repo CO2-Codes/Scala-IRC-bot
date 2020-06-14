@@ -21,16 +21,16 @@ class TitleParserSpec extends AnyFlatSpec with Matchers {
 
   }
 
-  "findTitle" should "strip newlines and so on" in {
-    TitleParser.findTitle("<title>a\nb\rc\td\be</title>") should be(Some("a b c d e"))
+  "sanitizeToIrcMessage" should "strip newlines and so on" in {
+    TitleParser.sanitizeToIrcMessage("a\nb\rc\td\be") should be("a b c d e")
   }
 
   "findTitle" should "unescape html special chars" in {
     TitleParser.findTitle("<title>&quot; &gt; &euro;</title>") should be(Some("\" > €"))
   }
 
-  "findTitle" should "trim whitespace" in {
-    TitleParser.findTitle("<title>      test       </title>") should be(Some("test"))
+  "sanitizeToIrcMessage" should "trim whitespace" in {
+    TitleParser.sanitizeToIrcMessage("      test       ") should be("test")
   }
 
 }
