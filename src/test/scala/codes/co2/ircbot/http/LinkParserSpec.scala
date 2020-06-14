@@ -27,5 +27,22 @@ class LinkParserSpec extends AnyFlatSpec with Matchers {
 
   }
 
+  "tryGetTwitterId" should "get the twitter status id given a status link" in {
+
+    val id = 1253198059040673793L
+
+    LinkParser.tryGetTwitterId("something random") should be(None)
+
+    LinkParser.tryGetTwitterId(s"https://twitter.com/scala_lang/status/$id") should be(Some(id))
+    LinkParser.tryGetTwitterId(s"http://twitter.com/scala_lang/status/$id") should be(Some(id))
+    LinkParser.tryGetTwitterId(s"https://mobile.twitter.com/scala_lang/status/$id") should be(Some(id))
+
+    LinkParser.tryGetTwitterId(s"https://twitter.com.evil.org/scala_lang/status/$id") should be(None)
+    LinkParser.tryGetTwitterId(s"https://eviltwitter.com/scala_lang/status/$id") should be(None)
+
+    LinkParser.tryGetTwitterId(s"https://twitter.com/scala_lang/status/$id?url_param=whatever&status=123") should be(Some(id))
+    LinkParser.tryGetTwitterId(s"https://twitter.com/scala_lang/status/$id/photo/2") should be(Some(id))
+
+  }
 
 }
