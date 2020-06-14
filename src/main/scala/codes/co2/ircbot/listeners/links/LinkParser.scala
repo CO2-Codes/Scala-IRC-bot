@@ -29,4 +29,16 @@ object LinkParser {
     }
   }
 
+  private val youtubeLongVideoUrlRegex = "https?://(?:[^/]*\\.)*youtube\\.com/watch\\?(?:.*&)*v=([a-zA-Z0-9_\\-]+)(?:&.*)*".r
+  private val youtubeShortVideoUrlRegex = "https?://youtu\\.be/([a-zA-Z0-9_\\-]+).*".r
+
+  def tryGetYoutubeId(url: String): Option[String] = {
+
+    url match {
+      case youtubeLongVideoUrlRegex(id)  => Some(id)
+      case youtubeShortVideoUrlRegex(id) => Some(id)
+      case _                             => None
+    }
+  }
+
 }

@@ -18,7 +18,6 @@ class LinkParserSpec extends AnyFlatSpec with Matchers {
     LinkParser.findLink("bla https://github.com bla http://google.com") should be(Some("https://github.com"))
   }
 
-
   "findLink" should "return none if the message does not contain a link" in {
 
     LinkParser.findLink("something http blabla") should be(None)
@@ -40,8 +39,36 @@ class LinkParserSpec extends AnyFlatSpec with Matchers {
     LinkParser.tryGetTwitterId(s"https://twitter.com.evil.org/scala_lang/status/$id") should be(None)
     LinkParser.tryGetTwitterId(s"https://eviltwitter.com/scala_lang/status/$id") should be(None)
 
-    LinkParser.tryGetTwitterId(s"https://twitter.com/scala_lang/status/$id?url_param=whatever&status=123") should be(Some(id))
+    LinkParser.tryGetTwitterId(s"https://twitter.com/scala_lang/status/$id?url_param=whatever&status=123") should be(
+      Some(id)
+    )
     LinkParser.tryGetTwitterId(s"https://twitter.com/scala_lang/status/$id/photo/2") should be(Some(id))
+
+  }
+
+  "tryGetYoutubeId" should "get the youtube video id given a video link" in {
+
+    val id = "BxV14h0kFs0"
+
+    LinkParser.tryGetYoutubeId("something random") should be(None)
+
+    LinkParser.tryGetYoutubeId(s"https://youtu.be/$id") should be(Some(id))
+    LinkParser.tryGetYoutubeId(s"http://youtu.be/$id?t=2") should be(Some(id))
+
+    LinkParser.tryGetYoutubeId(s"https://www.youtube.com/watch?v=$id") should be(Some(id))
+    LinkParser.tryGetYoutubeId(s"http://m.youtube.com/watch?v=$id") should be(Some(id))
+    LinkParser.tryGetYoutubeId(s"https://www.youtube.com/watch?v=$id&feature=youtu.be&t=2") should be(Some(id))
+    LinkParser.tryGetYoutubeId(s"https://www.youtube.com/watch?feature=youtu.be&v=$id&t=2") should be(Some(id))
+    LinkParser.tryGetYoutubeId(s"https://www.youtube.com/watch?feature=youtu.be&t=2&v=$id") should be(Some(id))
+
+    LinkParser.tryGetYoutubeId(s"http://m.youtube.com/watch?v=ab-_") should be(Some("ab-_"))
+
+  }
+
+  "tryGetYoutubeId" should "ignore non-video links" in {
+
+    LinkParser.tryGetYoutubeId(s"https://www.youtube.com/user/enyay") should be(None)
+    LinkParser.tryGetYoutubeId(s"https://www.youtube.com/channel/UCRUULstZRWS1lDvJBzHnkXA") should be(None)
 
   }
 

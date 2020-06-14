@@ -1,6 +1,6 @@
 name := "Scala-IRC-bot"
 
-version := "0.4.0"
+version := "1.0.0"
 
 scalaVersion := "2.13.2"
 
@@ -48,21 +48,30 @@ lazy val silencerVersion = "1.7.0"
 
 lazy val ircBot = project.in(file("."))
   .settings(
+    resolvers += "jitpack" at "https://jitpack.io",
     libraryDependencies += compilerPlugin(
       "com.github.ghik" %% "silencer-plugin" % silencerVersion cross CrossVersion.full
     ),
     libraryDependencies ++= Seq(
-      "org.pircbotx"           % "pircbotx"        % "2.1",
-      "com.github.pureconfig" %% "pureconfig"      % "0.12.3",
-      "ch.qos.logback"         % "logback-classic" % "1.2.3",
-      "com.typesafe.akka"     %% "akka-http"       % "10.1.12",
-      "com.typesafe.akka"     %% "akka-actor"      % "2.6.6",
-      "com.typesafe.akka"     %% "akka-stream"     % "2.6.6",
-      "org.apache.commons"     % "commons-text"    % "1.8",
-      "com.danielasfregola"   %% "twitter4s"       % "6.2",
-      "com.github.ghik"       %% "silencer-lib"    % silencerVersion % Provided cross CrossVersion.full,
-      "org.scalatest"         %% "scalatest"       % "3.1.2"         % "test",
+      "com.github.pircbotx"    % "pircbotx"                    % "master-SNAPSHOT", // Use snapshot to prevent an issue with incompatible transitive dependencies.
+      "com.github.pureconfig" %% "pureconfig"                  % "0.12.3",
+      "ch.qos.logback"         % "logback-classic"             % "1.2.3",
+      "com.typesafe.akka"     %% "akka-http"                   % "10.1.12",
+      "com.typesafe.akka"     %% "akka-actor"                  % "2.6.6",
+      "com.typesafe.akka"     %% "akka-stream"                 % "2.6.6",
+      "org.apache.commons"     % "commons-text"                % "1.8",
+      "com.danielasfregola"   %% "twitter4s"                   % "6.2",
+      "com.google.api-client"  % "google-api-client"           % "1.30.9",
+      "com.google.apis"        % "google-api-services-youtube" % "v3-rev20200526-1.30.9",
+      "com.github.ghik"       %% "silencer-lib"                % silencerVersion % Provided cross CrossVersion.full,
+      "org.scalatest"         %% "scalatest"                   % "3.1.2"         % "test",
     ),
   )
   .settings(test in assembly := {})
   .settings(mainClass in assembly := Some("codes.co2.ircbot.pircbotx.Main"))
+  .settings(assemblyMergeStrategy in assembly := {
+    case "module-info.class" => MergeStrategy.discard
+    case x =>
+      val oldStrategy = (assemblyMergeStrategy in assembly).value
+      oldStrategy(x)
+  })

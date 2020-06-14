@@ -8,6 +8,8 @@ import org.pircbotx.PircBotX
 import org.pircbotx.hooks.events.{ConnectEvent, ExceptionEvent, ListenerExceptionEvent, MessageEvent, PrivateMessageEvent}
 import org.slf4j.{Logger, LoggerFactory}
 
+import scala.concurrent.Future
+
 class AdminListener(config: AdminListenerConfig, generalConfig: GeneralConfig)(implicit actorSystem: ActorSystem) extends GenericListener(generalConfig) {
   val log: Logger = LoggerFactory.getLogger(getClass)
 
@@ -15,7 +17,7 @@ class AdminListener(config: AdminListenerConfig, generalConfig: GeneralConfig)(i
 
   override def onConnect(event: ConnectEvent): Unit = {
     // Set IRC server bot user mode
-    getBot(event).send().mode(getBot(event).getNick, "+B")
+    getBot(event).sendIRC().mode(getBot(event).getNick, "+B")
   }
 
   override def onAcceptedUserPrivateMsg(event: PrivateMessageEvent): Unit = {
@@ -30,9 +32,9 @@ class AdminListener(config: AdminListenerConfig, generalConfig: GeneralConfig)(i
           val command = msg.split(" ", 3)
           command.headOption match {
             case Some("!say") if command.sizeIs >= 2 =>
-              getBot(event).send().message(command(1), command(2))
+              getBot(event).sendIRC().message(command(1), command(2))
             case Some("!act") if command.sizeIs >= 2 =>
-              getBot(event).send().action(command(1), command(2))
+              getBot(event).sendIRC().action(command(1), command(2))
           }
         case _ => ()
       }
@@ -65,9 +67,12 @@ class AdminListener(config: AdminListenerConfig, generalConfig: GeneralConfig)(i
   private def shutdown(bot: PircBotX): Unit = {
     bot.stopBotReconnect()
     bot.sendIRC().quitServer("I don't wanna go...")
-    actorSystem.terminate()
-    ()
+    Future{
+      Thread.sleep(100)
+      java.lang.Runtime.getRuntime.halt(0)
+    }(actorSystem.dispatcher)
 
+    ()
   }
 
 }
