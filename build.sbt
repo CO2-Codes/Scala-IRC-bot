@@ -1,6 +1,6 @@
 name := "Scala-IRC-bot"
 
-version := "1.0.0"
+version := "1.0.1"
 
 scalaVersion := "2.13.2"
 
@@ -64,7 +64,7 @@ lazy val ircBot = project.in(file("."))
       "com.google.api-client"  % "google-api-client"           % "1.30.9",
       "com.google.apis"        % "google-api-services-youtube" % "v3-rev20200526-1.30.9",
       "com.github.ghik"       %% "silencer-lib"                % silencerVersion % Provided cross CrossVersion.full,
-      "org.scalatest"         %% "scalatest"                   % "3.1.2"         % "test",
+      "org.scalatest"         %% "scalatest"                   % "3.2.0"         % "test",
     ),
   )
   .settings(test in assembly := {})

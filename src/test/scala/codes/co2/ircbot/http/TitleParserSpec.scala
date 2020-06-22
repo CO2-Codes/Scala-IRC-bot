@@ -11,6 +11,9 @@ class TitleParserSpec extends AnyFlatSpec with Matchers {
     TitleParser.findTitle("<TITLE>title 1</TITLE> and <title>title 2</title>") should be(Some("title 1"))
     TitleParser.findTitle("<TITLE></TITLE>") should be(Some(""))
 
+    TitleParser.findTitle("Some <html> with here a <title id = \"yo\">This is my title</title> </body") should be(Some("This is my title"))
+    TitleParser.findTitle("Some <html> with </title> here a <title id = \"yo\">This is my title</title> </body") should be(Some("This is my title"))
+
   }
 
   "findTitle" should "return none if there is no valid title" in {
@@ -18,6 +21,9 @@ class TitleParserSpec extends AnyFlatSpec with Matchers {
     TitleParser.findTitle("Some <html> with here a </title>This is my title</title> </body") should be(None)
     TitleParser.findTitle("Bla") should be(None)
     TitleParser.findTitle("<Title>") should be(None)
+
+    TitleParser.findTitle("Some <html> with here a <title id = \"yo\" This is my title</title> </body") should be(None)
+    TitleParser.findTitle("Some <html> with </title> here a <title id = \"yo\">This is my title </body") should be(None)
 
   }
 

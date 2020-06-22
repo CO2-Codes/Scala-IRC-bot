@@ -6,13 +6,16 @@ object TitleParser {
 
   def findTitle(page: String): Option[String] = {
     val lowerCase = page.toLowerCase
-    val startTagIdx = lowerCase.indexOf("<title>")
-    val endTagIdx = lowerCase.indexOf("</title>")
 
-    if (startTagIdx >= 0 && endTagIdx > startTagIdx) {
-      Some(page.substring(startTagIdx + 7, endTagIdx))
-        .map(StringEscapeUtils.unescapeHtml4)
-    } else None
+    val startTagIdx = Some(lowerCase.indexOf("<title"))
+    for {
+      startTagIdxOpt <- startTagIdx if startTagIdxOpt >= 0
+      startTagClosingBraceIdx = lowerCase.indexOf('>', startTagIdxOpt) if startTagClosingBraceIdx >= 0
+      endTagIdx = lowerCase.indexOf("</title>", startTagClosingBraceIdx) if endTagIdx >= 0
+      title = page.substring(startTagClosingBraceIdx + 1, endTagIdx)
+      escapedTitle = StringEscapeUtils.unescapeHtml4(title)
+
+    } yield escapedTitle
 
   }
 
