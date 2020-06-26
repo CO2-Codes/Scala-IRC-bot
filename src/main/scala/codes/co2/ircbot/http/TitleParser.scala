@@ -13,9 +13,7 @@ object TitleParser {
       startTagClosingBraceIdx = lowerCase.indexOf('>', startTagIdxOpt) if startTagClosingBraceIdx >= 0
       endTagIdx = lowerCase.indexOf("</title>", startTagClosingBraceIdx) if endTagIdx >= 0
       title = page.substring(startTagClosingBraceIdx + 1, endTagIdx)
-      escapedTitle = StringEscapeUtils.unescapeHtml4(title)
-
-    } yield escapedTitle
+    } yield title
 
   }
 
@@ -32,7 +30,7 @@ object TitleParser {
   }
 
   def sanitizeToIrcMessage(text: String): String = {
-    stripSpecialChars(text).trim
+    stripSpecialChars(StringEscapeUtils.unescapeHtml4(text)).trim
   }
 
 }

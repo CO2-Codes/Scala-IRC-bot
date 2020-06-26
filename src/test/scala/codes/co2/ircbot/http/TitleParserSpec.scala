@@ -31,8 +31,8 @@ class TitleParserSpec extends AnyFlatSpec with Matchers {
     TitleParser.sanitizeToIrcMessage("a\nb\rc\td\be") should be("a b c d e")
   }
 
-  "findTitle" should "unescape html special chars" in {
-    TitleParser.findTitle("<title>&quot; &gt; &euro;</title>") should be(Some("\" > €"))
+  "sanitizeToIrcMessage" should "unescape html special chars" in {
+    TitleParser.sanitizeToIrcMessage("&quot; &gt; &euro;") should be("\" > €")
   }
 
   "sanitizeToIrcMessage" should "trim whitespace" in {
