@@ -2,7 +2,7 @@ name := "Scala-IRC-bot"
 
 version := "1.0.1"
 
-scalaVersion := "2.13.3"
+scalaVersion := "2.13.4"
 
 // Recommended flags from https://tpolecat.github.io/2017/04/25/scalac-flags.html (Removed scala 2.13 deprecated flags)
 scalacOptions ++= Seq(
@@ -43,27 +43,23 @@ scalacOptions ++= Seq(
   "-Ywarn-unused:privates", // Warn if a private member is unused.
   "-Ywarn-value-discard", // Warn when non-Unit expression results are unused.
 )
-lazy val silencerVersion = "1.7.0"
 
 lazy val ircBot = project.in(file("."))
   .settings(
     resolvers += "jitpack" at "https://jitpack.io",
-    libraryDependencies += compilerPlugin(
-      "com.github.ghik" %% "silencer-plugin" % silencerVersion cross CrossVersion.full
-    ),
+
     libraryDependencies ++= Seq(
       "com.github.pircbotx"    % "pircbotx"                    % "master-SNAPSHOT", // Use snapshot to prevent an issue with incompatible transitive dependencies.
-      "com.github.pureconfig" %% "pureconfig"                  % "0.12.3",
+      "com.github.pureconfig" %% "pureconfig"                  % "0.14.0",
       "ch.qos.logback"         % "logback-classic"             % "1.2.3",
-      "com.typesafe.akka"     %% "akka-http"                   % "10.1.12",
-      "com.typesafe.akka"     %% "akka-actor"                  % "2.6.6",
-      "com.typesafe.akka"     %% "akka-stream"                 % "2.6.6",
-      "org.apache.commons"     % "commons-text"                % "1.8",
-      "com.danielasfregola"   %% "twitter4s"                   % "6.2",
-      "com.google.api-client"  % "google-api-client"           % "1.30.9",
-      "com.google.apis"        % "google-api-services-youtube" % "v3-rev20200526-1.30.9",
-      "com.github.ghik"       %% "silencer-lib"                % silencerVersion % Provided cross CrossVersion.full,
-      "org.scalatest"         %% "scalatest"                   % "3.2.0"         % "test",
+      "com.typesafe.akka"     %% "akka-http"                   % "10.2.1",
+      "com.typesafe.akka"     %% "akka-actor"                  % "2.6.10",
+      "com.typesafe.akka"     %% "akka-stream"                 % "2.6.10",
+      "org.apache.commons"     % "commons-text"                % "1.9",
+      "com.danielasfregola"   %% "twitter4s"                   % "7.0",
+      "com.google.api-client"  % "google-api-client"           % "1.31.1",
+      "com.google.apis"        % "google-api-services-youtube" % "v3-rev20200618-1.30.9",
+      "org.scalatest"         %% "scalatest"                   % "3.2.3"         % "test",
     ),
   )
   .settings(test in assembly := {})

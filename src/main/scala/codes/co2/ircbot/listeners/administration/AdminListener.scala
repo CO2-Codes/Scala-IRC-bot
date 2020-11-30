@@ -35,6 +35,7 @@ class AdminListener(config: AdminListenerConfig, generalConfig: GeneralConfig)(i
               getBot(event).sendIRC().message(command(1), command(2))
             case Some("!act") if command.sizeIs >= 2 =>
               getBot(event).sendIRC().action(command(1), command(2))
+            case _ => ()
           }
         case _ => ()
       }
