@@ -31,7 +31,7 @@ case class GeneralConfig(
 
 case class TwitterApi(consumerToken: ConsumerToken, accessToken: AccessToken)
 
-case class LinkListenerConfig(boldTitles: Option[Boolean], twitterApi: Option[TwitterApi], youtubeApiKey: Option[String])
+case class LinkListenerConfig(boldTitles: Option[Boolean], twitterApi: Option[TwitterApi], youtubeApiKey: Option[String], useHttpProxy: Option[Boolean])
 
 case class AdminListenerConfig(helpText: String, puppetMasters: Option[Seq[String]])
 
@@ -48,7 +48,7 @@ object BotConfiguration {
     .at("link-listener").load[LinkListenerConfig]
     .fold(failures => {
       log.info(s"Could not load link-listener config, reason ${failures.toList.map(_.description)} Using default config.")
-      LinkListenerConfig(None, None, None)
+      LinkListenerConfig(None, None, None, None)
     }, success => success)
 
   def loadAdminListenerConfig(path: Path): AdminListenerConfig = ConfigSource.default(ConfigSource.file(path))
