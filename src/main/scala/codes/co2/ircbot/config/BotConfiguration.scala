@@ -9,7 +9,9 @@ import com.danielasfregola.twitter4s.entities.{AccessToken, ConsumerToken}
 
 case class BotConfiguration(
                              connection: Connection,
+                             serverPassword: Option[String],
                              nickname: String,
+                             ident: Option[String],
                              realname: Option[String],
                              nickservPassword: Option[String],
                              channels: Seq[String],
