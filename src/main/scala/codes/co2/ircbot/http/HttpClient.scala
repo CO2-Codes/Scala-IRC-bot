@@ -3,6 +3,7 @@ package codes.co2.ircbot.http
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
+import akka.http.scaladsl.settings.ConnectionPoolSettings
 import akka.stream.scaladsl.Sink
 import akka.util.ByteString
 import org.slf4j.{Logger, LoggerFactory}
@@ -14,7 +15,7 @@ class HttpClient(implicit system: ActorSystem) {
   val log: Logger = LoggerFactory.getLogger(getClass)
   implicit val ec: ExecutionContext = system.dispatcher
 
-  def getTitle(url: String): Future[Option[String]] = {
+  def getTitle(url: String)(implicit s: ConnectionPoolSettings): Future[Option[String]] = {
     getPage(url).map(pageOpt => pageOpt.flatMap(page =>
       {
         val titleOpt = TitleParser.findTitle(page)
@@ -23,8 +24,8 @@ class HttpClient(implicit system: ActorSystem) {
       }))
   }
 
-  def getPage(url: String, alreadyRedirected: Boolean = false): Future[Option[String]] = {
-    Http().singleRequest(HttpRequest(uri = url))
+  def getPage(url: String, alreadyRedirected: Boolean = false)(implicit s: ConnectionPoolSettings): Future[Option[String]] = {
+    Http().singleRequest(HttpRequest(uri = url), settings = s)
       .flatMap(response => {
         val result = response.status match {
           case status if status.isRedirection() && !alreadyRedirected =>
@@ -71,7 +72,7 @@ class HttpClient(implicit system: ActorSystem) {
     ).runWith(Sink.fold(ByteString.empty)(_ ++ _)).map(byteString => Some(byteString.utf8String))
   }
 
-  private def redirect(url: String, response: HttpResponse) = {
+  private def redirect(url: String, response: HttpResponse)(implicit s: ConnectionPoolSettings) = {
     response.headers.find(header => header.is("location")).map(
       header => {
         log.info(s"redirecting from $url to ${header.value}")

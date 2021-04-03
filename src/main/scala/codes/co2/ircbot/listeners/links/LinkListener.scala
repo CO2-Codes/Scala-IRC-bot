@@ -1,5 +1,8 @@
 package codes.co2.ircbot.listeners.links
 
+import akka.actor.ActorSystem
+import akka.http.scaladsl.ClientTransport
+import akka.http.scaladsl.settings.{ConnectionPoolSettings, ClientConnectionSettings}
 import codes.co2.ircbot.config.{GeneralConfig, LinkListenerConfig}
 import codes.co2.ircbot.http.{HttpClient, TitleParser}
 import codes.co2.ircbot.listeners.GenericListener
@@ -19,9 +22,16 @@ import scala.jdk.CollectionConverters._
 import scala.util.control.NonFatal
 
 class LinkListener(httpClient: HttpClient, config: LinkListenerConfig, generalConfig: GeneralConfig)(implicit
-  ec: ExecutionContext
+  ec: ExecutionContext,
+  system: ActorSystem
 ) extends GenericListener(generalConfig) {
   val log: Logger = LoggerFactory.getLogger(getClass)
+
+  implicit val httpSettings: ConnectionPoolSettings = if (config.useHttpProxy.getOrElse(false)) {
+      ConnectionPoolSettings(system)
+        .withConnectionSettings(ClientConnectionSettings(system)
+          .withTransport(ClientTransport.httpsProxy()))
+  } else ConnectionPoolSettings(system)
 
   val twitterClientOpt: Option[TwitterRestClient] =
     config.twitterApi.map { twitterApi =>
