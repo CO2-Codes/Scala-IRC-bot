@@ -10,7 +10,7 @@ import com.danielasfregola.twitter4s.TwitterRestClient
 import com.danielasfregola.twitter4s.entities.enums.TweetMode
 import com.danielasfregola.twitter4s.exceptions.TwitterException
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
-import com.google.api.client.json.jackson2.JacksonFactory
+import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.youtube.YouTube
 import org.pircbotx.hooks.events.{ActionEvent, MessageEvent}
 import org.pircbotx.hooks.types.GenericMessageEvent
@@ -23,14 +23,16 @@ import scala.util.control.NonFatal
 
 class LinkListener(httpClient: HttpClient, config: LinkListenerConfig, generalConfig: GeneralConfig)(implicit
   ec: ExecutionContext,
-  system: ActorSystem
+  system: ActorSystem,
 ) extends GenericListener(generalConfig) {
   val log: Logger = LoggerFactory.getLogger(getClass)
 
   implicit val httpSettings: ConnectionPoolSettings = if (config.useHttpProxy.getOrElse(false)) {
-      ConnectionPoolSettings(system)
-        .withConnectionSettings(ClientConnectionSettings(system)
-          .withTransport(ClientTransport.httpsProxy()))
+    ConnectionPoolSettings(system)
+      .withConnectionSettings(
+        ClientConnectionSettings(system)
+          .withTransport(ClientTransport.httpsProxy())
+      )
   } else ConnectionPoolSettings(system)
 
   val twitterClientOpt: Option[TwitterRestClient] =
@@ -46,7 +48,7 @@ class LinkListener(httpClient: HttpClient, config: LinkListenerConfig, generalCo
       log.info("Starting youtube client.")
 
       val httpTransport = GoogleNetHttpTransport.newTrustedTransport
-      YoutubeClient(new YouTube.Builder(httpTransport, JacksonFactory.getDefaultInstance, null).build, youtubeKey)
+      YoutubeClient(new YouTube.Builder(httpTransport, GsonFactory.getDefaultInstance, null).build, youtubeKey)
 
     }
   }

@@ -1,8 +1,8 @@
 name := "Scala-IRC-bot"
 
-version := "1.0.1"
+version := "1.1.0"
 
-scalaVersion := "2.13.4"
+scalaVersion := "2.13.5"
 
 // Recommended flags from https://tpolecat.github.io/2017/04/25/scalac-flags.html (Removed scala 2.13 deprecated flags)
 scalacOptions ++= Seq(
@@ -47,19 +47,19 @@ scalacOptions ++= Seq(
 lazy val ircBot = project.in(file("."))
   .settings(
     resolvers += "jitpack" at "https://jitpack.io",
-
     libraryDependencies ++= Seq(
       "com.github.pircbotx"    % "pircbotx"                    % "master-SNAPSHOT", // Use snapshot to prevent an issue with incompatible transitive dependencies.
-      "com.github.pureconfig" %% "pureconfig"                  % "0.14.0",
+      "com.github.pureconfig" %% "pureconfig"                  % "0.14.1",
       "ch.qos.logback"         % "logback-classic"             % "1.2.3",
-      "com.typesafe.akka"     %% "akka-http"                   % "10.2.1",
-      "com.typesafe.akka"     %% "akka-actor"                  % "2.6.10",
-      "com.typesafe.akka"     %% "akka-stream"                 % "2.6.10",
+      "com.typesafe.akka"     %% "akka-http"                   % "10.2.4",
+      "com.typesafe.akka"     %% "akka-actor"                  % "2.6.13",
+      "com.typesafe.akka"     %% "akka-stream"                 % "2.6.13",
       "org.apache.commons"     % "commons-text"                % "1.9",
       "com.danielasfregola"   %% "twitter4s"                   % "7.0",
-      "com.google.api-client"  % "google-api-client"           % "1.31.1",
-      "com.google.apis"        % "google-api-services-youtube" % "v3-rev20200618-1.30.9",
-      "org.scalatest"         %% "scalatest"                   % "3.2.3"         % "test",
+      "com.google.api-client"  % "google-api-client"           % "1.31.3",
+      "com.google.apis"        % "google-api-services-youtube" % "v3-rev20210210-1.31.0",
+      "org.scalatest"         %% "scalatest"                   % "3.2.7" % "test",
+      "com.typesafe.akka"     %% "akka-stream"                 % "2.6.13",
     ),
   )
   .settings(test in assembly := {})

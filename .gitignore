@@ -1,5 +1,6 @@
 # sbt
 target/
+.bsp/
 
 # IntelliJ
 .idea
