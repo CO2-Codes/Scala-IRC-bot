@@ -1,6 +1,6 @@
 name := "Scala-IRC-bot"
 
-version := "1.1.0"
+ThisBuild / version := "1.1.1"
 
 scalaVersion := "2.13.5"
 
@@ -49,24 +49,24 @@ lazy val ircBot = project.in(file("."))
     resolvers += "jitpack" at "https://jitpack.io",
     libraryDependencies ++= Seq(
       "com.github.pircbotx"    % "pircbotx"                    % "master-SNAPSHOT", // Use snapshot to prevent an issue with incompatible transitive dependencies.
-      "com.github.pureconfig" %% "pureconfig"                  % "0.14.1",
+      "com.github.pureconfig" %% "pureconfig"                  % "0.15.0",
       "ch.qos.logback"         % "logback-classic"             % "1.2.3",
       "com.typesafe.akka"     %% "akka-http"                   % "10.2.4",
-      "com.typesafe.akka"     %% "akka-actor"                  % "2.6.13",
-      "com.typesafe.akka"     %% "akka-stream"                 % "2.6.13",
+      "com.typesafe.akka"     %% "akka-actor"                  % "2.6.14",
+      "com.typesafe.akka"     %% "akka-stream"                 % "2.6.14",
       "org.apache.commons"     % "commons-text"                % "1.9",
       "com.danielasfregola"   %% "twitter4s"                   % "7.0",
-      "com.google.api-client"  % "google-api-client"           % "1.31.3",
-      "com.google.apis"        % "google-api-services-youtube" % "v3-rev20210210-1.31.0",
-      "org.scalatest"         %% "scalatest"                   % "3.2.7" % "test",
-      "com.typesafe.akka"     %% "akka-stream"                 % "2.6.13",
+      "com.google.api-client"  % "google-api-client"           % "1.31.4",
+      "com.google.apis"        % "google-api-services-youtube" % "v3-rev20210410-1.31.0",
+      "org.scalatest"         %% "scalatest"                   % "3.2.8" % "test",
+      "com.typesafe.akka"     %% "akka-stream"                 % "2.6.14",
     ),
   )
-  .settings(test in assembly := {})
-  .settings(mainClass in assembly := Some("codes.co2.ircbot.pircbotx.Main"))
-  .settings(assemblyMergeStrategy in assembly := {
+  .settings(assembly / test := {})
+  .settings(assembly / mainClass := Some("codes.co2.ircbot.pircbotx.Main"))
+  .settings(assembly / assemblyMergeStrategy := {
     case "module-info.class" => MergeStrategy.discard
     case x =>
-      val oldStrategy = (assemblyMergeStrategy in assembly).value
+      val oldStrategy = (assembly / assemblyMergeStrategy).value
       oldStrategy(x)
   })
