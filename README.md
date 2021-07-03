@@ -1,6 +1,6 @@
 # Scala-IRC-bot
 
-This is a Scala implementation of an IRC bot, on top of https://github.com/pircbotx/pircbotx.
+This is a Scala 3 implementation of an IRC bot, on top of https://github.com/pircbotx/pircbotx.
 
 ## How to install
 First, make a configuration file, based on [the example](example.conf).

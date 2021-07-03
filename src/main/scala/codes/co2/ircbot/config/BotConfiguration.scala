@@ -1,43 +1,54 @@
 package codes.co2.ircbot.config
 
+import codes.co2.ircbot.config
+import com.danielasfregola.twitter4s.entities.{AccessToken, ConsumerToken}
+import org.slf4j.{Logger, LoggerFactory}
+import pureconfig.generic.derivation.default._
+import pureconfig.{ConfigReader, ConfigSource, _}
+
 import java.nio.file.Path
 
-import org.slf4j.{Logger, LoggerFactory}
-import pureconfig.ConfigSource
-import pureconfig.generic.auto._ // IntelliJ might see this as an unused import. IntelliJ is wrong.
-import com.danielasfregola.twitter4s.entities.{AccessToken, ConsumerToken}
+/* Pureconfig's new Scala 3 derivations with the ConfigReader is still in beta
+but seems to work well enough for our usecase. Just make sure to add the ConfigReader
+to every case class or it might not be able to parse them at runtime.
+ */
 
 case class BotConfiguration(
-                             connection: Connection,
-                             serverPassword: Option[String],
-                             nickname: String,
-                             ident: Option[String],
-                             realname: Option[String],
-                             nickservPassword: Option[String],
-                             channels: Seq[String],
-                             fingerMsg: Option[String],
-                             listeners: Seq[String],
-                             generalConfig: GeneralConfig,
-                           )
+  connection: Connection,
+  serverPassword: Option[String],
+  nickname: String,
+  ident: Option[String],
+  realname: Option[String],
+  nickservPassword: Option[String],
+  channels: Seq[String],
+  fingerMsg: Option[String],
+  listeners: Seq[String],
+  generalConfig: GeneralConfig,
+) derives ConfigReader
 
-case class Connection(serverName: String, port: Int, ssl: Boolean)
+case class Connection(serverName: String, port: Int, ssl: Boolean) derives ConfigReader
 
 case class GeneralConfig(
-                          ignoreNicks: Option[Seq[String]],
-                          ignoreChannels: Option[Seq[String]],
-                          botAdmins: Seq[String],
-                        ) {
+  ignoreNicks: Option[Seq[String]],
+  ignoreChannels: Option[Seq[String]],
+  botAdmins: Seq[String],
+) derives ConfigReader {
   val ignoredChannels: Seq[String] = ignoreChannels.getOrElse(Seq.empty)
   val ignoredNicks: Seq[String] = ignoreNicks.getOrElse(Seq.empty)
 }
 
-case class TwitterApi(consumerToken: ConsumerToken, accessToken: AccessToken)
+case class TwitterApi(consumerToken: ConsumerToken, accessToken: AccessToken) derives ConfigReader
 
-case class LinkListenerConfig(boldTitles: Option[Boolean], twitterApi: Option[TwitterApi], youtubeApiKey: Option[String], useHttpProxy: Option[Boolean])
+case class LinkListenerConfig(
+  boldTitles: Option[Boolean],
+  twitterApi: Option[TwitterApi],
+  youtubeApiKey: Option[String],
+  useHttpProxy: Option[Boolean],
+) derives ConfigReader
 
-case class AdminListenerConfig(helpText: String, puppetMasters: Option[Seq[String]])
+case class AdminListenerConfig(helpText: String, puppetMasters: Option[Seq[String]]) derives ConfigReader
 
-case class PronounListenerConfig(filePath: String)
+case class PronounListenerConfig(filePath: String) derives ConfigReader
 
 object BotConfiguration {
   val log: Logger = LoggerFactory.getLogger(getClass)
