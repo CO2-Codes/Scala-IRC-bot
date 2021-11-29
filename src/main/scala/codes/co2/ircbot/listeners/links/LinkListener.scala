@@ -27,13 +27,14 @@ class LinkListener(httpClient: HttpClient, config: LinkListenerConfig, generalCo
 ) extends GenericListener(generalConfig) {
   val log: Logger = LoggerFactory.getLogger(getClass)
 
-  implicit val httpSettings: ConnectionPoolSettings = if (config.useHttpProxy.getOrElse(false)) {
-    ConnectionPoolSettings(system)
-      .withConnectionSettings(
-        ClientConnectionSettings(system)
-          .withTransport(ClientTransport.httpsProxy())
-      )
-  } else ConnectionPoolSettings(system)
+  implicit val httpSettings: ConnectionPoolSettings =
+    if (config.useHttpProxy.getOrElse(false)) {
+      ConnectionPoolSettings(system)
+        .withConnectionSettings(
+          ClientConnectionSettings(system)
+            .withTransport(ClientTransport.httpsProxy())
+        )
+    } else ConnectionPoolSettings(system)
 
   val twitterClientOpt: Option[TwitterRestClient] =
     config.twitterApi.map { twitterApi =>
@@ -71,7 +72,15 @@ class LinkListener(httpClient: HttpClient, config: LinkListenerConfig, generalCo
 
     def send(title: String): Unit = {
       log.info(s"Sending $title to ${channel.getName}")
-      channel.send().message(s"$boldTag$title$normalTag")
+
+      val lowerCaseTitle = title.toLowerCase()
+
+      if (config.lowerCaseSpamList.exists(spamWord => lowerCaseTitle.contains(spamWord))) {
+        channel.send().message("Are you a spammer?")
+      } else {
+        channel.send().message(s"$boldTag$title$normalTag")
+      }
+
     }
 
     if (lowerCase.contains("http://") || lowerCase.contains("https://")) {
@@ -108,7 +117,8 @@ class LinkListener(httpClient: HttpClient, config: LinkListenerConfig, generalCo
   private def getAsTweetOpt(link: String): Option[Future[String]] = {
     for {
 
-      twitterClient <- twitterClientOpt // This order because don't even bother the regex if the twitterClient doesn't exist
+      twitterClient <-
+        twitterClientOpt // This order because don't even bother the regex if the twitterClient doesn't exist
       tweetId <- LinkParser.tryGetTwitterId(link)
       tweet = twitterClient.getTweet(
         tweetId,
@@ -128,7 +138,8 @@ class LinkListener(httpClient: HttpClient, config: LinkListenerConfig, generalCo
   private def getAsYoutubeOpt(link: String): Option[Future[Option[String]]] = {
     for {
 
-      youtubeClient <- youtubeClientOpt // This order because don't even bother the regex if the youtubeClient doesn't exist
+      youtubeClient <-
+        youtubeClientOpt // This order because don't even bother the regex if the youtubeClient doesn't exist
       youtubeId <- LinkParser.tryGetYoutubeId(link)
       request = youtubeClient.client.videos().list(List("snippet").asJava)
       response = Future(request.setId(List(youtubeId).asJava).setKey(youtubeClient.key).execute())
