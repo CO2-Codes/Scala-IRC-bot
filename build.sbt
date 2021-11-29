@@ -2,7 +2,7 @@ name := "Scala-IRC-bot"
 
 ThisBuild / version := "1.2.0"
 
-scalaVersion := "3.0.0"
+scalaVersion := "3.1.0"
 
 scalacOptions ++= Seq(
   "-deprecation", // Emit warning and location for usages of deprecated APIs.
@@ -24,16 +24,16 @@ lazy val ircBot = project.in(file("."))
     libraryDependencies ++= Seq(
       // Use snapshot to prevent an issue with incompatible transitive dependencies.
       "com.github.pircbotx"    % "pircbotx"                    % "master-SNAPSHOT",
-      "com.github.pureconfig" %% "pureconfig-core"             % "0.16.0",
-      "ch.qos.logback"         % "logback-classic"             % "1.2.3",
-      "com.typesafe.akka"     %% "akka-http"                   % "10.2.4" cross CrossVersion.for3Use2_13,
-      "com.typesafe.akka"     %% "akka-actor"                  % "2.6.15" cross CrossVersion.for3Use2_13,
-      "com.typesafe.akka"     %% "akka-stream"                 % "2.6.15" cross CrossVersion.for3Use2_13,
+      "com.github.pureconfig" %% "pureconfig-core"             % "0.17.1",
+      "ch.qos.logback"         % "logback-classic"             % "1.2.7",
+      "com.typesafe.akka"     %% "akka-http"                   % "10.2.7" cross CrossVersion.for3Use2_13,
+      "com.typesafe.akka"     %% "akka-actor"                  % "2.6.17" cross CrossVersion.for3Use2_13,
+      "com.typesafe.akka"     %% "akka-stream"                 % "2.6.17" cross CrossVersion.for3Use2_13,
       "org.apache.commons"     % "commons-text"                % "1.9",
       "com.danielasfregola"   %% "twitter4s"                   % "7.0" cross CrossVersion.for3Use2_13,
-      "com.google.api-client"  % "google-api-client"           % "1.32.1",
-      "com.google.apis"        % "google-api-services-youtube" % "v3-rev20210624-1.32.1",
-      "org.scalatest"         %% "scalatest"                   % "3.2.9" % "test",
+      "com.google.api-client"  % "google-api-client"           % "1.32.2",
+      "com.google.apis"        % "google-api-services-youtube" % "v3-rev20210915-1.32.1",
+      "org.scalatest"         %% "scalatest"                   % "3.2.10" % "test",
     ),
   )
   .settings(assembly / test := {})

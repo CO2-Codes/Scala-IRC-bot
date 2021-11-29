@@ -44,7 +44,10 @@ case class LinkListenerConfig(
   twitterApi: Option[TwitterApi],
   youtubeApiKey: Option[String],
   useHttpProxy: Option[Boolean],
-) derives ConfigReader
+  spamList: Option[Seq[String]],
+) derives ConfigReader {
+  val lowerCaseSpamList = spamList.map(_.map(_.toLowerCase)).getOrElse(Seq.empty)
+}
 
 case class AdminListenerConfig(helpText: String, puppetMasters: Option[Seq[String]]) derives ConfigReader
 
@@ -59,23 +62,38 @@ object BotConfiguration {
 
   def loadLinkListenerConfig(path: Path): LinkListenerConfig = ConfigSource.default(ConfigSource.file(path))
     .at("link-listener").load[LinkListenerConfig]
-    .fold(failures => {
-      log.info(s"Could not load link-listener config, reason ${failures.toList.map(_.description)} Using default config.")
-      LinkListenerConfig(None, None, None, None)
-    }, success => success)
+    .fold(
+      failures => {
+        log.info(
+          s"Could not load link-listener config, reason ${failures.toList.map(_.description)} Using default config."
+        )
+        LinkListenerConfig(None, None, None, None, None)
+      },
+      success => success,
+    )
 
   def loadAdminListenerConfig(path: Path): AdminListenerConfig = ConfigSource.default(ConfigSource.file(path))
     .at("admin-listener").load[AdminListenerConfig]
-    .fold(failures => {
-      log.info(s"Could not load admin-listener config, reason ${failures.toList.map(_.description)} Using default config.")
-      AdminListenerConfig("", None)
-    }, success => success)
+    .fold(
+      failures => {
+        log.info(
+          s"Could not load admin-listener config, reason ${failures.toList.map(_.description)} Using default config."
+        )
+        AdminListenerConfig("", None)
+      },
+      success => success,
+    )
 
-    def loadPronounListenerConfig(path: Path): PronounListenerConfig = ConfigSource.default(ConfigSource.file(path))
-      .at("pronoun-listener").load[PronounListenerConfig]
-      .fold(failures => {
-        log.info(s"Could not load pronoun-listener config, reason ${failures.toList.map(_.description)} Using default config.")
+  def loadPronounListenerConfig(path: Path): PronounListenerConfig = ConfigSource.default(ConfigSource.file(path))
+    .at("pronoun-listener").load[PronounListenerConfig]
+    .fold(
+      failures => {
+        log.info(
+          s"Could not load pronoun-listener config, reason ${failures.toList.map(_.description)} Using default config."
+        )
         PronounListenerConfig("pronouns.txt")
-      }, success => success)
+      },
+      success => success,
+    )
 
 }
