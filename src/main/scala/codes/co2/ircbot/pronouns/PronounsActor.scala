@@ -133,27 +133,27 @@ object PronounsActor {
 
   object Pronoun {
 
-    case object He extends Pronoun {
+    private case object He extends Pronoun {
       override val letter: Char = 'm' // male
       override val description: String = "he/him"
     }
 
-    case object She extends Pronoun {
+    private case object She extends Pronoun {
       override val letter: Char = 'f' // female
       override val description: String = "she/her"
     }
 
-    case object They extends Pronoun {
+    private case object They extends Pronoun {
       override val letter: Char = 'n' // neutral
       override val description: String = "they/them"
     }
 
-    case object It extends Pronoun {
+    private case object It extends Pronoun {
       override val letter: Char = 'i' // inanimate
       override val description: String = "it/its"
     }
 
-    case object Other extends Pronoun {
+    private case object Other extends Pronoun {
       override val letter: Char = 'o' // other
       override val description: String = "other, please ask"
     }
