@@ -26,23 +26,34 @@ class LinkParserSpec extends AnyFlatSpec with Matchers {
 
   }
 
-  "tryGetTwitterId" should "get the twitter status id given a status link" in {
+  "convertTwitterStatusUrlToFxtwitter" should "make a valid fxtwitter API url given a twitter status link" in {
 
     val id = 1253198059040673793L
 
+    val expected = s"https://api.fxtwitter.com/scala_lang/status/$id"
+
     LinkParser.convertTwitterStatusUrlToFxtwitter("something random") should be(None)
 
-    LinkParser.convertTwitterStatusUrlToFxtwitter(s"https://twitter.com/scala_lang/status/$id") should be(Some(id))
-    LinkParser.convertTwitterStatusUrlToFxtwitter(s"http://twitter.com/scala_lang/status/$id") should be(Some(id))
-    LinkParser.convertTwitterStatusUrlToFxtwitter(s"https://mobile.twitter.com/scala_lang/status/$id") should be(Some(id))
+    LinkParser.convertTwitterStatusUrlToFxtwitter(s"https://twitter.com/scala_lang/status/$id") should be(
+      Some(expected)
+    )
+    LinkParser.convertTwitterStatusUrlToFxtwitter(s"http://twitter.com/scala_lang/status/$id") should be(Some(expected))
+    LinkParser.convertTwitterStatusUrlToFxtwitter(s"https://mobile.twitter.com/scala_lang/status/$id") should be(
+      Some(expected)
+    )
 
     LinkParser.convertTwitterStatusUrlToFxtwitter(s"https://twitter.com.evil.org/scala_lang/status/$id") should be(None)
     LinkParser.convertTwitterStatusUrlToFxtwitter(s"https://eviltwitter.com/scala_lang/status/$id") should be(None)
 
-    LinkParser.convertTwitterStatusUrlToFxtwitter(s"https://twitter.com/scala_lang/status/$id?url_param=whatever&status=123") should be(
-      Some(id)
+    // URL params and the /photo URL is being ignored by fxtwitter so we can safely leave them.
+    LinkParser.convertTwitterStatusUrlToFxtwitter(
+      s"https://twitter.com/scala_lang/status/$id?url_param=whatever&status=123"
+    ) should be(
+      Some(s"$expected?url_param=whatever&status=123")
     )
-    LinkParser.convertTwitterStatusUrlToFxtwitter(s"https://twitter.com/scala_lang/status/$id/photo/2") should be(Some(id))
+    LinkParser.convertTwitterStatusUrlToFxtwitter(s"https://twitter.com/scala_lang/status/$id/photo/2") should be(
+      Some(s"$expected/photo/2")
+    )
 
   }
 
