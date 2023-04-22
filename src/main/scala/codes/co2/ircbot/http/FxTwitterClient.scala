@@ -73,7 +73,7 @@ class FxTwitterClient(implicit system: ActorSystem) {
 object FxTwitterClient {
   private case class FxTwitterResponse(tweet: Tweet)
 
-  private case class Tweet(text: String, author: Author, poll: Option[Unit], media: Option[Media])
+  private case class Tweet(text: String, author: Author, media: Option[Media])
 
   private case class Author(name: String)
 

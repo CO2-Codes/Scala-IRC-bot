@@ -1,6 +1,6 @@
 name := "Scala-IRC-bot"
 
-ThisBuild / version := "1.2.1"
+ThisBuild / version := "1.3.0"
 
 scalaVersion := "3.2.2"
 
@@ -25,9 +25,9 @@ lazy val ircBot = project.in(file("."))
     libraryDependencies ++= Seq(
       // Use snapshot because pircbotx releases are few and far between.
       "com.github.pircbotx"    % "pircbotx"                    % "master-SNAPSHOT",
-      "com.github.pureconfig" %% "pureconfig-core"             % "0.17.2",
-      "ch.qos.logback"         % "logback-classic"             % "1.4.6",
-      "com.typesafe.akka"     %% "akka-http"                   % "10.5.0",
+      "com.github.pureconfig" %% "pureconfig-core"             % "0.17.3",
+      "ch.qos.logback"         % "logback-classic"             % "1.4.7",
+      "com.typesafe.akka"     %% "akka-http"                   % "10.5.1",
       "com.typesafe.akka"     %% "akka-actor"                  % "2.8.0",
       "com.typesafe.akka"     %% "akka-stream"                 % "2.8.0",
       "io.circe"              %% "circe-core"                  % "0.14.5",
@@ -35,7 +35,7 @@ lazy val ircBot = project.in(file("."))
       "io.circe"              %% "circe-parser"                % "0.14.5",
       "org.apache.commons"     % "commons-text"                % "1.10.0",
       "com.google.api-client"  % "google-api-client"           % "2.2.0",
-      "com.google.apis"        % "google-api-services-youtube" % "v3-rev20221108-2.0.0",
+      "com.google.apis"        % "google-api-services-youtube" % "v3-rev20230319-2.0.0",
       "org.scalatest"         %% "scalatest"                   % "3.2.15" % "test",
     ),
   )
