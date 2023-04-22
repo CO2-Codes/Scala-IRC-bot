@@ -1,8 +1,8 @@
 name := "Scala-IRC-bot"
 
-ThisBuild / version := "1.2.1"
+ThisBuild / version := "1.3.0"
 
-scalaVersion := "3.2.1"
+scalaVersion := "3.2.2"
 
 scalacOptions ++= Seq(
   "-deprecation", // Emit warning and location for usages of deprecated APIs.
@@ -16,6 +16,7 @@ scalacOptions ++= Seq(
   "-language:implicitConversions", // Allow definition of implicit functions called views
   "-unchecked", // Enable additional warnings where generated code depends on assumptions.
   "-Xfatal-warnings", // Fail the compilation if there are any warnings.
+  "-Wconf:all=error",
 )
 
 lazy val ircBot = project.in(file("."))
@@ -24,16 +25,18 @@ lazy val ircBot = project.in(file("."))
     libraryDependencies ++= Seq(
       // Use snapshot because pircbotx releases are few and far between.
       "com.github.pircbotx"    % "pircbotx"                    % "master-SNAPSHOT",
-      "com.github.pureconfig" %% "pureconfig-core"             % "0.17.2",
-      "ch.qos.logback"         % "logback-classic"             % "1.4.5",
-      "com.typesafe.akka"     %% "akka-http"                   % "10.4.0" cross CrossVersion.for3Use2_13,
-      "com.typesafe.akka"     %% "akka-actor"                  % "2.7.0" cross CrossVersion.for3Use2_13,
-      "com.typesafe.akka"     %% "akka-stream"                 % "2.7.0" cross CrossVersion.for3Use2_13,
+      "com.github.pureconfig" %% "pureconfig-core"             % "0.17.3",
+      "ch.qos.logback"         % "logback-classic"             % "1.4.7",
+      "com.typesafe.akka"     %% "akka-http"                   % "10.5.1",
+      "com.typesafe.akka"     %% "akka-actor"                  % "2.8.0",
+      "com.typesafe.akka"     %% "akka-stream"                 % "2.8.0",
+      "io.circe"              %% "circe-core"                  % "0.14.5",
+      "io.circe"              %% "circe-generic"               % "0.14.5",
+      "io.circe"              %% "circe-parser"                % "0.14.5",
       "org.apache.commons"     % "commons-text"                % "1.10.0",
-      "com.danielasfregola"   %% "twitter4s"                   % "8.0" cross CrossVersion.for3Use2_13,
-      "com.google.api-client"  % "google-api-client"           % "2.1.1",
-      "com.google.apis"        % "google-api-services-youtube" % "v3-rev20221108-2.0.0",
-      "org.scalatest"         %% "scalatest"                   % "3.2.14" % "test",
+      "com.google.api-client"  % "google-api-client"           % "2.2.0",
+      "com.google.apis"        % "google-api-services-youtube" % "v3-rev20230319-2.0.0",
+      "org.scalatest"         %% "scalatest"                   % "3.2.15" % "test",
     ),
   )
   .settings(assembly / test := {})

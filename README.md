@@ -35,11 +35,12 @@ given channel or anything, use at your discretion.
 This listener reacts to messages and actions containing http/https links. It attempts to retrieve the <title> tag in
 html pages and if it can find one, it will send the title to the channel.
 
-If the configuration has Twitter API credentials (which you can get at https://developer.twitter.com) it will use the
-Twitter API to get Twitter texts instead of depending on the Twitter website which keeps changing.
+Since scraping Twitter works really badly and the Twitter API randomly blocks users, twitter information is now retrieved
+through the fantastic and free [FxTwitter](https://github.com/FixTweet/FixTweet) API, with additional information such
+as embedded photos and even a generated mosaic when multiple photos are embedded.
 
-If the configuration has Youtube API credentials (which you can get at https://console.developers.google.com/) it will use the
-Youtube API to get Youtube video titles instead of depending on the Youtube website which keeps changing.
+If the configuration has YouTube API credentials (which you can get at https://console.developers.google.com/) it will use the
+YouTube API to get YouTube video titles instead of depending on the Youtube website which keeps changing.
 
 ### pronounListener
 This listener stores users' personal pronouns (he, she, they, it, other) and can be used to look up the pronouns. It
