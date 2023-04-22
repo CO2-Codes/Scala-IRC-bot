@@ -1,7 +1,6 @@
 package codes.co2.ircbot.config
 
 import codes.co2.ircbot.config
-import com.danielasfregola.twitter4s.entities.{AccessToken, ConsumerToken}
 import org.slf4j.{Logger, LoggerFactory}
 import pureconfig.generic.derivation.default._
 import pureconfig.{ConfigReader, ConfigSource, _}
@@ -37,16 +36,13 @@ case class GeneralConfig(
   val ignoredNicks: Seq[String] = ignoreNicks.getOrElse(Seq.empty)
 }
 
-case class TwitterApi(consumerToken: ConsumerToken, accessToken: AccessToken) derives ConfigReader
-
 case class LinkListenerConfig(
   boldTitles: Option[Boolean],
-  twitterApi: Option[TwitterApi],
   youtubeApiKey: Option[String],
   useHttpProxy: Option[Boolean],
   spamList: Option[Seq[String]],
 ) derives ConfigReader {
-  val lowerCaseSpamList = spamList.map(_.map(_.toLowerCase)).getOrElse(Seq.empty)
+  val lowerCaseSpamList: Seq[String] = spamList.map(_.map(_.toLowerCase)).getOrElse(Seq.empty)
 }
 
 case class AdminListenerConfig(helpText: String, puppetMasters: Option[Seq[String]]) derives ConfigReader
@@ -67,7 +63,7 @@ object BotConfiguration {
         log.info(
           s"Could not load link-listener config, reason ${failures.toList.map(_.description)} Using default config."
         )
-        LinkListenerConfig(None, None, None, None, None)
+        LinkListenerConfig(None, None, None, None)
       },
       success => success,
     )

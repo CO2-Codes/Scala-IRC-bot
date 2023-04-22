@@ -16,7 +16,7 @@ scalacOptions ++= Seq(
   "-language:implicitConversions", // Allow definition of implicit functions called views
   "-unchecked", // Enable additional warnings where generated code depends on assumptions.
   "-Xfatal-warnings", // Fail the compilation if there are any warnings.
-  "-Wconf:all=error"
+  "-Wconf:all=error",
 )
 
 lazy val ircBot = project.in(file("."))
@@ -30,8 +30,10 @@ lazy val ircBot = project.in(file("."))
       "com.typesafe.akka"     %% "akka-http"                   % "10.5.0",
       "com.typesafe.akka"     %% "akka-actor"                  % "2.8.0",
       "com.typesafe.akka"     %% "akka-stream"                 % "2.8.0",
+      "io.circe"              %% "circe-core"                  % "0.14.5",
+      "io.circe"              %% "circe-generic"               % "0.14.5",
+      "io.circe"              %% "circe-parser"                % "0.14.5",
       "org.apache.commons"     % "commons-text"                % "1.10.0",
-      "com.danielasfregola"   %% "twitter4s"                   % "8.0" cross CrossVersion.for3Use2_13 excludeAll ExclusionRule("com.typesafe.akka"),
       "com.google.api-client"  % "google-api-client"           % "2.2.0",
       "com.google.apis"        % "google-api-services-youtube" % "v3-rev20221108-2.0.0",
       "org.scalatest"         %% "scalatest"                   % "3.2.15" % "test",

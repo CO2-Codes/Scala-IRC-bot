@@ -19,13 +19,18 @@ object LinkParser {
 
   }
 
-  private val twitterStatusUrlRegex = "https?://(?:[^/]*\\.)*twitter\\.com/[a-zA-Z0-9_]*/status/(\\d+).*".r
+  private val twitterStatusUrlRegex = "https?://(?:[^/]*\\.)*twitter\\.com/[a-zA-Z0-9_]*/status/\\d+.*".r
 
-  def tryGetTwitterId(url: String): Option[Long] = {
+  /** If the param is a twitter /status URL, return a valid fxtwitter API URL. Otherwise return None.
+    */
+  def convertTwitterStatusUrlToFxtwitter(url: String): Option[String] = {
 
     url match {
-      case twitterStatusUrlRegex(id) => Some(id.toLong)
-      case _                         => None
+      case twitterStatusUrlRegex() =>
+        Some(url
+          .replace("http://", "https://")
+          .replace("twitter.com", "api.fxtwitter.com"))
+      case _ => None
     }
   }
 
