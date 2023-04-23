@@ -115,7 +115,7 @@ class LinkListener(
 
     val fxTwitterUrlOpt = LinkParser.convertTwitterStatusUrlToFxtwitter(link)
 
-    fxTwitterUrlOpt.map(fxTwitterClient.getResult(_))
+    fxTwitterUrlOpt.map(fxTwitterClient.getResult(_).unsafeToFuture())
 
   }
 

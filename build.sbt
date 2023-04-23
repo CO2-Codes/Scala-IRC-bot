@@ -33,12 +33,13 @@ lazy val ircBot = project.in(file("."))
       "io.circe"                      %% "circe-core"                  % "0.14.5",
       "io.circe"                      %% "circe-generic"               % "0.14.5",
       "io.circe"                      %% "circe-parser"                % "0.14.5",
+      "com.softwaremill.sttp.client3" %% "core"                        % "3.8.15",
+      "com.softwaremill.sttp.client3" %% "fs2"                         % "3.8.15",
+      "com.softwaremill.sttp.client3" %% "circe"                       % "3.8.15",
       "org.apache.commons"             % "commons-text"                % "1.10.0",
       "com.google.api-client"          % "google-api-client"           % "2.2.0",
       "com.google.apis"                % "google-api-services-youtube" % "v3-rev20230319-2.0.0",
       "org.scalatest"                 %% "scalatest"                   % "3.2.15" % "test",
-      "com.softwaremill.sttp.client3" %% "core"                        % "3.8.15",
-      "com.softwaremill.sttp.client3" %% "fs2"                         % "3.8.15",
     ),
   )
   .settings(assembly / test := {})
