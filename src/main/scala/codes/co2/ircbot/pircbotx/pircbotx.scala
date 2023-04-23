@@ -1,7 +1,6 @@
 package codes.co2.ircbot
 
 import java.nio.file.Path
-import akka.actor.ActorSystem
 import codes.co2.ircbot.config.BotConfiguration
 import codes.co2.ircbot.http.{FxTwitterClient, HttpClient}
 import codes.co2.ircbot.listeners.administration.AdminListener
@@ -25,7 +24,7 @@ package object pircbotx {
 
     }
 
-    def addListeners(config: BotConfiguration, configPath: Path)(implicit ac: ActorSystem, ec: ExecutionContext): Configuration.Builder = {
+    def addListeners(config: BotConfiguration, configPath: Path)(implicit ec: ExecutionContext): Configuration.Builder = {
 
       val listeners: Seq[Listener] = config.listeners.map{
         case "adminListener" => new AdminListener(BotConfiguration.loadAdminListenerConfig(configPath), config.generalConfig)

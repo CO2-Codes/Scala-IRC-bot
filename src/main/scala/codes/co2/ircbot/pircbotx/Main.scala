@@ -1,14 +1,13 @@
 package codes.co2.ircbot.pircbotx
 
 import java.nio.file.Paths
-import akka.actor.ActorSystem
 import codes.co2.ircbot.config.BotConfiguration
 import org.pircbotx.delay.AdaptingDelay
 import org.pircbotx.{Configuration, PircBotX}
 import org.slf4j.{Logger, LoggerFactory}
 
-import scala.concurrent.ExecutionContext
-import scala.jdk.CollectionConverters._
+import concurrent.ExecutionContext
+import scala.jdk.CollectionConverters.*
 import java.nio.file.Path
 
 object Main {
@@ -17,8 +16,10 @@ object Main {
   easily as this syntax does.
    */
 
-  def main(args: Array[String]) = {
+  def main(args: Array[String]): Unit = {
     val log: Logger = LoggerFactory.getLogger(getClass)
+
+    implicit val ec: ExecutionContext = ExecutionContext.global
 
     if (args.sizeIs != 1) {
       log.error("Please have (only) the path to the .conf file as a command line argument")
@@ -28,9 +29,6 @@ object Main {
     val path = Paths.get(args.head)
 
     val config = BotConfiguration.loadConfig(path)
-
-    implicit val actorSystem: ActorSystem = ActorSystem()
-    implicit val ec: ExecutionContext = actorSystem.dispatcher
 
     def pircConfiguration: Configuration = {
       new Configuration.Builder()

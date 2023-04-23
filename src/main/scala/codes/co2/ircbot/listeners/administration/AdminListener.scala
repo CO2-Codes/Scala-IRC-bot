@@ -1,16 +1,15 @@
 package codes.co2.ircbot.listeners.administration
 
-import akka.actor.ActorSystem
 import codes.co2.ircbot.config.{AdminListenerConfig, GeneralConfig}
 import codes.co2.ircbot.listeners.GenericListener
-import codes.co2.ircbot.listeners.GenericListener._
+import codes.co2.ircbot.listeners.GenericListener.*
 import org.pircbotx.PircBotX
 import org.pircbotx.hooks.events.{ConnectEvent, ExceptionEvent, ListenerExceptionEvent, MessageEvent, PrivateMessageEvent}
 import org.slf4j.{Logger, LoggerFactory}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class AdminListener(config: AdminListenerConfig, generalConfig: GeneralConfig)(implicit actorSystem: ActorSystem) extends GenericListener(generalConfig) {
+class AdminListener(config: AdminListenerConfig, generalConfig: GeneralConfig)(implicit ec: ExecutionContext) extends GenericListener(generalConfig) {
   val log: Logger = LoggerFactory.getLogger(getClass)
 
   private val puppetMasters = config.puppetMasters.getOrElse(Seq.empty)
@@ -71,7 +70,7 @@ class AdminListener(config: AdminListenerConfig, generalConfig: GeneralConfig)(i
     Future{
       Thread.sleep(100)
       java.lang.Runtime.getRuntime.halt(0)
-    }(actorSystem.dispatcher)
+    }
 
     ()
   }

@@ -1,6 +1,5 @@
 package codes.co2.ircbot.pronouns
 
-import akka.actor.{Actor, ActorLogging, Props}
 import codes.co2.ircbot.pronouns.PronounsHandler.Pronoun
 import org.pircbotx.hooks.types.GenericMessageEvent
 import org.slf4j.{Logger, LoggerFactory}

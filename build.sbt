@@ -19,6 +19,9 @@ scalacOptions ++= Seq(
   "-Wconf:all=error",
 )
 
+val circeV = "0.14.5"
+val sttpClientV = "3.8.15"
+
 lazy val ircBot = project.in(file("."))
   .settings(
     resolvers += "jitpack" at "https://jitpack.io",
@@ -27,15 +30,12 @@ lazy val ircBot = project.in(file("."))
       "com.github.pircbotx"            % "pircbotx"                    % "master-SNAPSHOT",
       "com.github.pureconfig"         %% "pureconfig-core"             % "0.17.3",
       "ch.qos.logback"                 % "logback-classic"             % "1.4.7",
-      "com.typesafe.akka"             %% "akka-http"                   % "10.5.1",
-      "com.typesafe.akka"             %% "akka-actor"                  % "2.8.0",
-      "com.typesafe.akka"             %% "akka-stream"                 % "2.8.0",
-      "io.circe"                      %% "circe-core"                  % "0.14.5",
-      "io.circe"                      %% "circe-generic"               % "0.14.5",
-      "io.circe"                      %% "circe-parser"                % "0.14.5",
-      "com.softwaremill.sttp.client3" %% "core"                        % "3.8.15",
-      "com.softwaremill.sttp.client3" %% "fs2"                         % "3.8.15",
-      "com.softwaremill.sttp.client3" %% "circe"                       % "3.8.15",
+      "io.circe"                      %% "circe-core"                  % circeV,
+      "io.circe"                      %% "circe-generic"               % circeV,
+      "io.circe"                      %% "circe-parser"                % circeV,
+      "com.softwaremill.sttp.client3" %% "core"                        % sttpClientV,
+      "com.softwaremill.sttp.client3" %% "fs2"                         % sttpClientV,
+      "com.softwaremill.sttp.client3" %% "circe"                       % sttpClientV,
       "org.apache.commons"             % "commons-text"                % "1.10.0",
       "com.google.api-client"          % "google-api-client"           % "2.2.0",
       "com.google.apis"                % "google-api-services-youtube" % "v3-rev20230319-2.0.0",

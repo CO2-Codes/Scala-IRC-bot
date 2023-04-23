@@ -1,8 +1,5 @@
 package codes.co2.ircbot.listeners.links
 
-import akka.actor.ActorSystem
-import akka.http.scaladsl.ClientTransport
-import akka.http.scaladsl.settings.{ClientConnectionSettings, ConnectionPoolSettings}
 import codes.co2.ircbot.config.{GeneralConfig, LinkListenerConfig}
 import codes.co2.ircbot.http.{FxTwitterClient, HttpClient, TitleParser}
 import codes.co2.ircbot.listeners.GenericListener
@@ -24,20 +21,8 @@ class LinkListener(
   fxTwitterClient: FxTwitterClient,
   config: LinkListenerConfig,
   generalConfig: GeneralConfig,
-)(implicit
-  ec: ExecutionContext,
-  system: ActorSystem,
-) extends GenericListener(generalConfig) {
+)(implicit ec: ExecutionContext) extends GenericListener(generalConfig) {
   val log: Logger = LoggerFactory.getLogger(getClass)
-
-  implicit val httpSettings: ConnectionPoolSettings =
-    if (config.useHttpProxy.getOrElse(false)) {
-      ConnectionPoolSettings(system)
-        .withConnectionSettings(
-          ClientConnectionSettings(system)
-            .withTransport(ClientTransport.httpsProxy())
-        )
-    } else ConnectionPoolSettings(system)
 
   case class YoutubeClient(client: YouTube, key: String)
 

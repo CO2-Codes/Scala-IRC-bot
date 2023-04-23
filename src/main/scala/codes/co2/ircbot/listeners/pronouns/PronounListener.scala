@@ -1,7 +1,6 @@
 package codes.co2.ircbot.listeners.pronouns
 
 import java.io.File
-import akka.actor.{ActorRef, ActorSystem}
 import codes.co2.ircbot.config.{GeneralConfig, PronounListenerConfig}
 import codes.co2.ircbot.listeners.GenericListener
 import codes.co2.ircbot.listeners.GenericListener.*
@@ -20,11 +19,9 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.NonFatal
 
-class PronounListener(config: PronounListenerConfig, generalConfig: GeneralConfig)(implicit as: ActorSystem) extends GenericListener(generalConfig) {
+class PronounListener(config: PronounListenerConfig, generalConfig: GeneralConfig)(implicit ec: ExecutionContext) extends GenericListener(generalConfig) {
 
   private val pronounsHandler: PronounsHandler = new pronouns.PronounsHandler(new File(config.filePath))
-
-  implicit val ec: ExecutionContext = as.dispatcher
 
   override def onAcceptedUserPrivateMsg(event: PrivateMessageEvent): Unit = {
     onAcceptedMsg(event)
@@ -100,9 +97,7 @@ object PronounListener {
 
   val log: Logger = LoggerFactory.getLogger(getClass)
 
-  private def getNickservNick(event: GenericMessageEvent)(implicit as: ActorSystem): Option[String] = {
-
-    implicit val ec: ExecutionContext = as.dispatcher
+  private def getNickservNick(event: GenericMessageEvent)(implicit ec: ExecutionContext): Option[String] = {
 
     event.getUser.send.whoisDetail()
 
