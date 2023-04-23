@@ -39,7 +39,6 @@ case class GeneralConfig(
 case class LinkListenerConfig(
   boldTitles: Option[Boolean],
   youtubeApiKey: Option[String],
-  useHttpProxy: Option[Boolean],
   spamList: Option[Seq[String]],
 ) derives ConfigReader {
   val lowerCaseSpamList: Seq[String] = spamList.map(_.map(_.toLowerCase)).getOrElse(Seq.empty)
@@ -63,7 +62,7 @@ object BotConfiguration {
         log.info(
           s"Could not load link-listener config, reason ${failures.toList.map(_.description)} Using default config."
         )
-        LinkListenerConfig(None, None, None, None)
+        LinkListenerConfig(None, None, None)
       },
       success => success,
     )

@@ -1,31 +1,27 @@
 package codes.co2.ircbot.listeners.pronouns
 
 import java.io.File
-
-import akka.actor.{ActorRef, ActorSystem}
 import codes.co2.ircbot.config.{GeneralConfig, PronounListenerConfig}
 import codes.co2.ircbot.listeners.GenericListener
-import codes.co2.ircbot.listeners.GenericListener._
-import codes.co2.ircbot.listeners.pronouns.PronounListener._
-import codes.co2.ircbot.pronouns.PronounsActor
-import codes.co2.ircbot.pronouns.PronounsActor.Contract._
-import codes.co2.ircbot.pronouns.PronounsActor.Pronoun
+import codes.co2.ircbot.listeners.GenericListener.*
+import codes.co2.ircbot.listeners.pronouns.PronounListener.*
+import codes.co2.ircbot.pronouns
+import codes.co2.ircbot.pronouns.PronounsHandler
+import codes.co2.ircbot.pronouns.PronounsHandler.Pronoun
 import org.pircbotx.hooks.WaitForQueue
 import org.pircbotx.hooks.events.{MessageEvent, PrivateMessageEvent, WhoisEvent}
 import org.pircbotx.hooks.types.GenericMessageEvent
 import org.slf4j.{Logger, LoggerFactory}
 
 import scala.annotation.tailrec
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.Try
 import scala.util.control.NonFatal
 
-class PronounListener(config: PronounListenerConfig, generalConfig: GeneralConfig)(implicit as: ActorSystem) extends GenericListener(generalConfig) {
+class PronounListener(config: PronounListenerConfig, generalConfig: GeneralConfig)(implicit ec: ExecutionContext) extends GenericListener(generalConfig) {
 
-  val pronounsActor: ActorRef = as.actorOf(PronounsActor.props(new File(config.filePath)))
-
-  implicit val ec: ExecutionContext = as.dispatcher
+  private val pronounsHandler: PronounsHandler = new pronouns.PronounsHandler(new File(config.filePath))
 
   override def onAcceptedUserPrivateMsg(event: PrivateMessageEvent): Unit = {
     onAcceptedMsg(event)
@@ -38,9 +34,7 @@ class PronounListener(config: PronounListenerConfig, generalConfig: GeneralConfi
   private def onAcceptedMsg(event: GenericMessageEvent): Unit = {
     if (event.getMessage.startsWith("!pronouns-admin")) {
       handleAdminEvent(event: GenericMessageEvent)
-    }
-
-    if (event.getMessage.startsWith("!pronouns")) {
+    } else if (event.getMessage.startsWith("!pronouns")) {
       val msg = event.getMessage
 
       val splitByWords = msg.split(" ")
@@ -48,23 +42,23 @@ class PronounListener(config: PronounListenerConfig, generalConfig: GeneralConfi
       splitByWords.head match {
           /* This first case uses getNick instead of getNickservNick because for a get, verifying it's the right person
           is not worth an extra /whois */
-        case "!pronouns" if splitByWords.length == 1 => pronounsActor ! Get(event.getUser.getNick, event)
+        case "!pronouns" if splitByWords.length == 1 => pronounsHandler.get(event.getUser.getNick, event)
 
 
-        case "!pronouns" => pronounsActor ! Get(splitByWords(1), event)
+        case "!pronouns" => pronounsHandler.get(splitByWords(1), event)
 
         case "!pronouns-add" if splitByWords.length > 1 =>
           getPronoun(splitByWords(1), event)
             .foreach(pronoun => getNickservNick(event)
-              .foreach(nick => pronounsActor ! Add(nick, pronoun, event)))
+              .foreach(nick => pronounsHandler.add(nick, pronoun, event)))
 
         case "!pronouns-remove" if splitByWords.length > 1 =>
           getPronoun(splitByWords(1), event)
             .foreach(pronoun => getNickservNick(event)
-              .foreach(nick => pronounsActor ! Remove(nick, pronoun, event)))
+              .foreach(nick => pronounsHandler.remove(nick, pronoun, event)))
 
         case "!pronouns-forget" =>
-          getNickservNick(event).foreach(nick => pronounsActor ! Forget(nick, event))
+          getNickservNick(event).foreach(nick => pronounsHandler.forget(nick, event))
 
       }
 
@@ -79,13 +73,13 @@ class PronounListener(config: PronounListenerConfig, generalConfig: GeneralConfi
 
       splitByWords.head match {
         case "!pronouns-admin-add" if splitByWords.length > 2 =>
-          getPronoun(splitByWords(1), event).foreach(pronoun => pronounsActor ! Add(splitByWords(2), pronoun, event))
+          getPronoun(splitByWords(1), event).foreach(pronoun => pronounsHandler.add(splitByWords(2), pronoun, event))
 
         case "!pronouns-admin-remove" if splitByWords.length > 2 =>
-          getPronoun(splitByWords(1), event).foreach(pronoun => pronounsActor ! Remove(splitByWords(2), pronoun, event))
+          getPronoun(splitByWords(1), event).foreach(pronoun => pronounsHandler.remove(splitByWords(2), pronoun, event))
 
         case "!pronouns-admin-forget" if splitByWords.length > 1 =>
-          pronounsActor ! Forget(splitByWords(1), event)
+          pronounsHandler.forget(splitByWords(1), event)
       }
     }
 
@@ -103,9 +97,7 @@ object PronounListener {
 
   val log: Logger = LoggerFactory.getLogger(getClass)
 
-  private def getNickservNick(event: GenericMessageEvent)(implicit as: ActorSystem): Option[String] = {
-
-    implicit val ec: ExecutionContext = as.dispatcher
+  private def getNickservNick(event: GenericMessageEvent)(implicit ec: ExecutionContext): Option[String] = {
 
     event.getUser.send.whoisDetail()
 
