@@ -13,6 +13,7 @@ import org.pircbotx.hooks.events.{ActionEvent, MessageEvent}
 import org.pircbotx.hooks.types.GenericMessageEvent
 import org.pircbotx.{Channel, Colors}
 import org.slf4j.{Logger, LoggerFactory}
+import cats.effect.unsafe.implicits.global
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.jdk.CollectionConverters.*
@@ -98,8 +99,8 @@ class LinkListener(
 
               }.map(text => send(TitleParser.sanitizeToIrcMessage(text.getOrElse("[Video Not Found]"))))
             }
-          }.getOrElse(
-            httpClient.getTitle(link).map(_.foreach(text => send(TitleParser.sanitizeToIrcMessage(text))))
+          }.getOrElse (
+            httpClient.getTitle(link).map(_.foreach(text => send(TitleParser.sanitizeToIrcMessage(text)))).unsafeRunAsync(_ => ())
           ) // Fallback to normal title parsing
       }
 
