@@ -1,14 +1,12 @@
 package codes.co2.ircbot.http
 
-import org.slf4j.{Logger, LoggerFactory}
-import io.circe.generic.auto.*
-import io.circe.parser.*
-import sttp.client3.*
-
-import FxTwitterClient.*
 import cats.effect.IO
+import codes.co2.ircbot.http.FxTwitterClient.*
+import io.circe.generic.auto.*
+import org.slf4j.{Logger, LoggerFactory}
+import sttp.client3.*
+import sttp.client3.circe.*
 import sttp.client3.httpclient.fs2.HttpClientFs2Backend
-import sttp.client3.circe._
 
 class FxTwitterClient {
 
@@ -21,7 +19,7 @@ class FxTwitterClient {
         .response(asJson[FxTwitterResponse])
         .send(backend)
         .map { response =>
-          if (response.isSuccess && response.header("content-type").contains("application/json")) {
+          if (response.isSuccess && response.header("content-type").exists(_.contains("application/json"))) {
             log.info(s"Getting json from $url")
 
             response.body match {
