@@ -23,6 +23,10 @@ object LinkParser {
 
   private val mainTwitterUrl = "twitter.com"
 
+  private val elonsStupidNameStatusUrlRegex = "https?://(?:[^/]*\\.)*x\\.com/[a-zA-Z0-9_]*/status/\\d+.*".r
+
+  private val elonsStupidNameUrl = "x.com"
+
   /** If the param is a twitter /status URL, return a valid fxtwitter API URL. Otherwise return None.
     */
   def convertTwitterStatusUrlToFxtwitter(url: String): Option[String] = {
@@ -30,6 +34,11 @@ object LinkParser {
     url match {
       case twitterStatusUrlRegex() =>
         val remainder = url.drop(url.indexOf(mainTwitterUrl) + mainTwitterUrl.length)
+
+        Some(s"https://api.fxtwitter.com$remainder")
+
+      case elonsStupidNameStatusUrlRegex() =>
+        val remainder = url.drop(url.indexOf(elonsStupidNameUrl) + elonsStupidNameUrl.length)
 
         Some(s"https://api.fxtwitter.com$remainder")
 
