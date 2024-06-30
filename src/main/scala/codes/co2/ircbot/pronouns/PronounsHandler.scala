@@ -12,7 +12,7 @@ class PronounsHandler(file: File) {
 
   val log: Logger = LoggerFactory.getLogger(getClass)
 
-  private[this] val state: AtomicReference[Map[String, Set[Pronoun]]] =
+  private val state: AtomicReference[Map[String, Set[Pronoun]]] =
     new AtomicReference(Map.empty[String, Set[Pronoun]])
 
   private def start(): Unit = {
