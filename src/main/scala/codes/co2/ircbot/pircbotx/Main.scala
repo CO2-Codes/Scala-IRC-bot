@@ -31,6 +31,10 @@ object Main {
     val config = BotConfiguration.loadConfig(path)
 
     def pircConfiguration: Configuration = {
+      val waitForNickservBeforeJoining = config.nickservDelay
+        .map(nickServDelay => nickServDelay && config.nickservDelay.nonEmpty)
+        .getOrElse(config.nickservDelay.nonEmpty)
+      
       new Configuration.Builder()
         .addServer(config.connection.serverName, config.connection.port).setSocket(config.connection.ssl)
         .addAutoJoinChannels(config.channels.asJava)
@@ -41,7 +45,7 @@ object Main {
         .setLogin(config.ident.getOrElse(config.nickname))
         .setRealName(config.realname.getOrElse(config.nickname))
         .setServerPassword(config.serverPassword.orNull)
-        .setNickservPassword(config.nickservPassword.orNull).setNickservDelayJoin(config.nickservPassword.nonEmpty)
+        .setNickservPassword(config.nickservPassword.orNull).setNickservDelayJoin(waitForNickservBeforeJoining)
         .setAutoNickChange(true)
         .addListeners(config, path)
         .buildConfiguration()

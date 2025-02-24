@@ -2,7 +2,6 @@ package codes.co2.ircbot.config
 
 import codes.co2.ircbot.config
 import org.slf4j.{Logger, LoggerFactory}
-import pureconfig.generic.derivation.default._
 import pureconfig.{ConfigReader, ConfigSource, _}
 
 import java.nio.file.Path
@@ -19,6 +18,7 @@ case class BotConfiguration(
   ident: Option[String],
   realname: Option[String],
   nickservPassword: Option[String],
+  nickservDelay: Option[Boolean],
   channels: Seq[String],
   fingerMsg: Option[String],
   listeners: Seq[String],

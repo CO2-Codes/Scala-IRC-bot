@@ -1,8 +1,8 @@
 name := "Scala-IRC-bot"
 
-ThisBuild / version := "1.3.2"
+ThisBuild / version := "1.3.3"
 
-scalaVersion := "3.4.2"
+scalaVersion := "3.6.3"
 
 scalacOptions ++= Seq(
   "-deprecation", // Emit warning and location for usages of deprecated APIs.
@@ -20,26 +20,26 @@ scalacOptions ++= Seq(
   "-Xmax-inlines", "50"
 )
 
-val circeV = "0.14.8"
-val sttpClientV = "3.9.7"
+val circeV = "0.14.10"
+val sttpClientV = "3.10.3"
 
 lazy val ircBot = project.in(file("."))
   .settings(
     resolvers += "jitpack" at "https://jitpack.io",
     libraryDependencies ++= Seq(
       // Use snapshot because pircbotx releases are few and far between.
-      "com.github.pircbotx"            % "pircbotx"                    % "2.3.1",
-      "com.github.pureconfig"         %% "pureconfig-core"             % "0.17.7",
-      "ch.qos.logback"                 % "logback-classic"             % "1.5.6",
+      "com.github.pircbotx"            % "pircbotx"                    % "master-SNAPSHOT",
+      "com.github.pureconfig"         %% "pureconfig-core"             % "0.17.8",
+      "ch.qos.logback"                 % "logback-classic"             % "1.5.16",
       "io.circe"                      %% "circe-core"                  % circeV,
       "io.circe"                      %% "circe-generic"               % circeV,
       "io.circe"                      %% "circe-parser"                % circeV,
       "com.softwaremill.sttp.client3" %% "core"                        % sttpClientV,
       "com.softwaremill.sttp.client3" %% "fs2"                         % sttpClientV,
       "com.softwaremill.sttp.client3" %% "circe"                       % sttpClientV,
-      "org.apache.commons"             % "commons-text"                % "1.12.0",
-      "com.google.api-client"          % "google-api-client"           % "2.6.0",
-      "com.google.apis"                % "google-api-services-youtube" % "v3-rev20240514-2.0.0",
+      "org.apache.commons"             % "commons-text"                % "1.13.0",
+      "com.google.api-client"          % "google-api-client"           % "2.7.2",
+      "com.google.apis"                % "google-api-services-youtube" % "v3-rev20250128-2.0.0",
       "org.scalatest"                 %% "scalatest"                   % "3.2.19" % "test",
     ),
   )
