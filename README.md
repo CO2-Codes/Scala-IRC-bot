@@ -9,7 +9,7 @@ Use `sbt assembly` to create a .jar. Then run the bot with `java -jar <filename.
 
 To run the bot without making a jar, use `sbt "run <path/to/configfile>"`
 
-This bot is tested on openJDK 11.
+This bot is tested on openJDK 21.
 
 In the configuration file, the array of `bot-admins` is used to decide who is allowed to run admin-only commands.
 The separate `puppet-masters` array is used to decide who may puppet the bot.
@@ -41,6 +41,11 @@ as embedded photos and even a generated mosaic when multiple photos are embedded
 
 If the configuration has YouTube API credentials (which you can get at https://console.developers.google.com/) it will use the
 YouTube API to get YouTube video titles instead of depending on the Youtube website which keeps changing.
+
+### linkReplaceListener
+This listener listens to messages starting with the command `!wayback`. It will try to find an archived version of a link
+and send this to the user, both as a normal message as well as syntax to replace it in [Bucket](https://github.com/CO2-Codes/xkcd-bucket-docs)
+(the use-case this was built for). This listener works in private messages, too.
 
 ### pronounListener
 This listener stores users' personal pronouns (he, she, they, it, other) and can be used to look up the pronouns. It

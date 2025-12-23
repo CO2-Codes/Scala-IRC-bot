@@ -64,8 +64,10 @@ class LinkListener(
       }
 
     }
-
-    if (lowerCase.contains("http://") || lowerCase.contains("https://")) {
+    
+    if (lowerCase.startsWith("!wayback")) {
+      () // Stop. This is for the LinkReplaceListener
+    } else if (lowerCase.contains("http://") || lowerCase.contains("https://")) {
       LinkParser.findLink(eventMessage).foreach {
         link =>
           getAsTweetOpt(link).map { fut =>
